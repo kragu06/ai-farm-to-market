@@ -67,7 +67,7 @@ if farmer_location:
         f"### 🗺️ Nearby {infra_type}\n"
         f"[👉 Open in Google Maps]({maps_url})"
     )
-)
+
 if farmer_location:
     search_query = infra_type.replace(" ", "+")
     maps_url = f"https://www.google.com/maps/search/{search_query}+near+{farmer_location}"
