@@ -239,24 +239,12 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-# =========================
-# WORST-CASE WARNING
-# =========================
-worst_month = merged.sort_values("deviation_pct").iloc[0]
-loss_est = abs(worst_month["deviation_pct"]) * worst_month["price_seasonal"] / 100
-
-if "High" in worst_month["risk"]:
-    st.markdown(
-        f"""
-        <div class="card" style="background-color:#ffebee;">
-            <h4>⚠️ Worst-case Warning</h4>
-            Selling in <b>{worst_month['month_name']}</b> could mean an
-            estimated loss of <b>₹{int(loss_est)}</b> per unit compared
-            to seasonal average.
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+if deviation_pct < -30:
+    st.error("⚠️ Severe downside risk detected based on long-term historical behaviour.")
+elif deviation_pct < -15:
+    st.warning("⚠️ Moderate downside risk detected. Caution advised.")
+else:
+    st.success("✅ Price levels are within normal historical range.")
 
 # =========================
 # INFRASTRUCTURE MATCHING (MOCK LOGIC)
@@ -268,7 +256,12 @@ infra = pd.DataFrame({
     "Distance (km)": [12, 8, 3],
     "Cost": ["₹2/kg", "₹1.5/kg/day", "₹0"],
     "Time": ["3 days", "15 days", "Immediate"],
-    "Suitability": ["High", "Medium", "Low"]
+    "Suitability": ["High", "Medium", "Loif deviation_pct < -30:
+    st.error("⚠️ Severe downside risk detected based on long-term historical behaviour.")
+elif deviation_pct < -15:
+    st.warning("⚠️ Moderate downside risk detected. Caution advised.")
+else:
+    st.success("✅ Price levels are within normal historical range.")w"]
 })
 
 st.table(infra)
@@ -278,7 +271,12 @@ if st.button("Proceed with AI Recommendation"):
     st.success(
         f"""
         ✅ Action Confirmed!
-
+if "High" in risk:
+    best_option = "Solar Dryer"
+elif "Medium" in risk:
+    best_option = "Cold Storage"
+else:
+    best_option = "Fresh Sale"
         • Selected Option: **{best_option}**  
         • Quantity: **{quantity} kg**  
         • Next step: Initiating execution workflow.
