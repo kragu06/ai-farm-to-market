@@ -228,6 +228,30 @@ else:
 
 st.success(f"✅ Best Option Right Now: **{best_option}**")
 
+st.subheader("🏗️ AI Infrastructure Strategy")
+
+if "High" in risk:
+    infra_choice = "Solar Dryer"
+    infra_reason = (
+        "High supply glut detected. Drying reduces volume, "
+        "extends shelf life, and protects value during price crashes."
+    )
+elif "Medium" in risk:
+    infra_choice = "Cold Storage"
+    infra_reason = (
+        "Moderate price weakness detected. Short-term storage "
+        "allows selling during recovery windows."
+    )
+else:
+    infra_choice = "Fresh Market Sale"
+    infra_reason = (
+        "Prices are within or above normal range. Immediate sale "
+        "maximizes cash flow."
+    )
+
+st.success(f"✅ Suggested Infrastructure: **{infra_choice}**")
+st.info(f"🧠 Why: {infra_reason}")
+
 # =========================
 # VALUE IMPACT
 # =========================
