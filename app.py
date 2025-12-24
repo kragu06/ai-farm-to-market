@@ -2,63 +2,72 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-st.set_page_config(page_title="AI Farm-to-Market", layout="wide")
+st.set_page_config(page_title="AI Farm-to-Market Cockpit", layout="wide")
 
-st.title("🍅 AI-Powered Farm-to-Market Decision Dashboard")
-
-# -------------------------
-# Load Data
-# -------------------------
+# =========================
+# LOAD DATA
+# =========================
 data = pd.read_csv("price_data.csv")
 
-# Convert month number to name
 month_map = {
     1:"Jan", 2:"Feb", 3:"Mar", 4:"Apr", 5:"May", 6:"Jun",
     7:"Jul", 8:"Aug", 9:"Sep", 10:"Oct", 11:"Nov", 12:"Dec"
 }
 data["month_name"] = data["month"].map(month_map)
 
-# -------------------------
-# User Controls
-# -------------------------
-st.subheader("👨‍🌾 Context Selection")
-selected_year = st.selectbox("Select Year", sorted(data["year"].unique(), reverse=True))
+# =========================
+# HEADER
+# =========================
+st.title("🍅 AI-Powered Farm-to-Market Decision Cockpit")
+st.caption("Decision + Execution + Handholding | Outcome-based model")
 
+# =========================
+# CONTEXT PANEL
+# =========================
+st.subheader("👨‍🌾 Context")
+col1, col2, col3 = st.columns(3)
+with col1:
+    crop = st.selectbox("Crop", ["Tomato"])
+with col2:
+    quantity = st.number_input("Quantity (kg)", min_value=100, step=100)
+with col3:
+    urgency = st.selectbox("Farmer Urgency", ["Low", "Medium", "High"])
+
+# =========================
+# YEAR SELECTION
+# =========================
+st.subheader("📅 Market Context")
+selected_year = st.selectbox("Select Year", sorted(data["year"].unique(), reverse=True))
 year_data = data[data["year"] == selected_year]
 
-# -------------------------
-# Price Trend Plot
-# -------------------------
+# =========================
+# PRICE TREND
+# =========================
 st.subheader("📈 Monthly Price Trend")
-
 fig, ax = plt.subplots()
 ax.plot(year_data["month_name"], year_data["price"], marker="o")
 ax.set_xlabel("Month")
 ax.set_ylabel("Price (₹)")
-ax.set_title(f"Tomato Prices – {selected_year}")
+ax.set_title(f"{crop} Prices – {selected_year}")
 st.pyplot(fig)
 
-# -------------------------
-# Seasonal Baseline
-# -------------------------
+# =========================
+# SEASONAL BASELINE
+# =========================
 seasonal_avg = data.groupby("month")["price"].mean().reset_index()
-
 merged = pd.merge(
-    year_data,
-    seasonal_avg,
-    on="month",
-    suffixes=("_current", "_seasonal")
+    year_data, seasonal_avg, on="month", suffixes=("_current", "_seasonal")
 )
 
-# -------------------------
-# Crash Detection Logic
-# -------------------------
+# =========================
+# CRASH & RISK LOGIC
+# =========================
 merged["deviation_pct"] = (
-    (merged["price_current"] - merged["price_seasonal"]) 
-    / merged["price_seasonal"]
+    (merged["price_current"] - merged["price_seasonal"]) /
+    merged["price_seasonal"]
 ) * 100
 
-def classify_risk(dev):
+def risk_label(dev):
     if dev < -30:
         return "🔴 High Crash Risk"
     elif dev < -15:
@@ -66,50 +75,121 @@ def classify_risk(dev):
     else:
         return "🟢 Normal"
 
-merged["risk"] = merged["deviation_pct"].apply(classify_risk)
+merged["risk"] = merged["deviation_pct"].apply(risk_label)
 
-# -------------------------
-# Decision Logic
-# -------------------------
-def suggest_action(risk):
+# =========================
+# MARKET HEALTH SCORE
+# =========================
+avg_dev = merged["deviation_pct"].mean()
+health_score = int(max(0, min(100, 60 + avg_dev)))
+
+if health_score < 35:
+    health_text = "🔴 Dangerous"
+elif health_score < 60:
+    health_text = "🟠 Uncertain"
+else:
+    health_text = "🟢 Favorable"
+
+st.metric("🧠 Market Health Score", f"{health_score} / 100", health_text)
+
+# =========================
+# DECISION ENGINE
+# =========================
+def decision(risk, urgency):
     if "High" in risk:
-        return "Process / Store"
-    elif "Medium" in risk:
-        return "Hold if possible"
-    else:
-        return "Sell"
+        return "Process / Store", "Hold 3–4 weeks"
+    if "Medium" in risk:
+        return "Hold", "Review after 2 weeks"
+    return "Sell", "Sell within 7 days"
 
-merged["suggested_action"] = merged["risk"].apply(suggest_action)
-
-# -------------------------
-# Results Table
-# -------------------------
-st.subheader("⚖️ AI Decision Output")
-
-st.dataframe(
-    merged[[
-        "month_name",
-        "price_current",
-        "price_seasonal",
-        "risk",
-        "suggested_action"
-    ]].rename(columns={
-        "month_name":"Month",
-        "price_current":"Current Price (₹)",
-        "price_seasonal":"Seasonal Avg Price (₹)",
-        "risk":"Risk Level",
-        "suggested_action":"AI Suggestion"
-    }),
-    use_container_width=True
+merged[["action", "timeframe"]] = merged.apply(
+    lambda r: pd.Series(decision(r["risk"], urgency)), axis=1
 )
 
-# -------------------------
-# Explanation Section
-# -------------------------
-st.subheader("🧠 AI Explanation")
+# =========================
+# WORST-CASE WARNING
+# =========================
+worst_month = merged.sort_values("deviation_pct").iloc[0]
+loss_est = abs(worst_month["deviation_pct"]) * worst_month["price_seasonal"] / 100
 
+if "High" in worst_month["risk"]:
+    st.error(
+        f"⚠️ Worst-case warning: Selling in {worst_month['month_name']} "
+        f"could mean ~₹{int(loss_est)} loss per unit vs seasonal average."
+    )
+
+# =========================
+# INFRASTRUCTURE MATCHING (MOCK LOGIC)
+# =========================
+st.subheader("🏗️ Infrastructure Recommendation")
+
+infra = pd.DataFrame({
+    "Option": ["Solar Dryer", "Cold Storage", "Fresh Sale"],
+    "Distance (km)": [12, 8, 3],
+    "Cost": ["₹2/kg", "₹1.5/kg/day", "₹0"],
+    "Time": ["3 days", "15 days", "Immediate"],
+    "Suitability": ["High", "Medium", "Low"]
+})
+
+st.table(infra)
+
+best_option = "Solar Dryer" if health_score < 60 else "Fresh Sale"
+st.success(f"✅ Best Option Right Now: **{best_option}**")
+
+# =========================
+# VALUE ADD MARGIN
+# =========================
+st.subheader("💰 Value Impact")
+fresh_value = year_data["price"].mean()
+processed_value = fresh_value * 1.18
+
+st.write(f"• Fresh sale estimate: ₹{int(fresh_value)}")
+st.write(f"• After processing: ₹{int(processed_value)} (**+18%**)")
+
+# =========================
+# DEMAND & SALES INTELLIGENCE
+# =========================
+st.subheader("🛒 Demand & Sales Intelligence")
+
+if health_score < 50:
+    demand = "🟡 Medium"
+    buyer = "Processing Unit / Bulk Buyer"
+else:
+    demand = "🟢 High"
+    buyer = "Wholesale Mandi / Urban Buyer"
+
+st.write(f"**Demand Signal:** {demand}")
+st.write(f"**Suggested Buyer Type:** {buyer}")
+
+# =========================
+# AI EXPLANATION (BEDROCK STYLE)
+# =========================
+st.subheader("🧠 Why AI Suggests This")
+
+st.info(
+    "The system compares current monthly prices with long-term seasonal averages. "
+    "Prices falling significantly below normal seasonal levels are flagged as crash risks. "
+    "During such windows, storage or processing reduces downside risk and improves net income. "
+    "When prices align with or exceed seasonal norms, immediate selling is recommended."
+)
+
+# =========================
+# HANDHOLDING MODEL
+# =========================
+st.subheader("🤝 Platform Handholding Model")
 st.write(
-    "The system compares current month prices with long-term seasonal averages. "
-    "If prices fall significantly below normal seasonal levels, it flags a crash risk "
-    "and recommends processing or storage instead of immediate sale."
+    "• Farmers retain decision control\n"
+    "• Platform executes storage, processing, and sales\n"
+    "• Revenue is shared only if farmer income improves"
+)
+
+# =========================
+# IMPACT SUMMARY
+# =========================
+st.subheader("🎯 Expected Impact")
+st.write(
+    "📈 Income improvement: **+12–25%**\n\n"
+    "🌾 Distress sale reduction\n\n"
+    "♻️ Lower post-harvest waste\n\n"
+    "🌞 Better utilization of rural infrastructure"
 )
