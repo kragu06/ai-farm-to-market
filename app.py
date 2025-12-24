@@ -256,6 +256,11 @@ elif "Medium" in worst_month["risk"]:
 else:
     best_option = "Fresh Sale"
 
+if "High" in worst_month["risk"]:
+    best_option = "Solar Dryer"
+elif "Medium" in worst_month["risk"]:
+    best_option = "Cold Storage"
+
 st.success(f"✅ Best Option Right Now: **{best_option}**")
 
 # =========================
