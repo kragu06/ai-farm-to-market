@@ -203,7 +203,29 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+# =========================
+# AI ACTION RECOMMENDATION
+# =========================
+st.subheader("🤖 AI Action Recommendation")
 
+if "High" in risk:
+    st.error(
+        "🔴 **Do NOT sell now.**\n\n"
+        "• Use **Solar Drying** to reduce losses\n"
+        "• OR store temporarily in **Cold Storage**\n\n"
+        "AI predicts distress sale risk if sold immediately."
+    )
+elif "Medium" in risk:
+    st.warning(
+        "🟠 **Avoid bulk selling.**\n\n"
+        "• Use **short-term Cold Storage**\n"
+        "• OR stagger sales over time."
+    )
+else:
+    st.success(
+        "🟢 **Sell Fresh Produce Now.**\n\n"
+        "Market conditions are favorable compared to historical trends."
+    )
 # =========================
 # DOWNSIDE WARNING
 # =========================
