@@ -1,84 +1,605 @@
-year,month,price
-2018,1,1520
-2018,2,1485
-2018,3,1620
-2018,4,2850
-2018,5,3400
-2018,6,2200
-2018,7,1450
-2018,8,1200
-2018,9,1100
-2018,10,1250
-2018,11,1800
-2018,12,2100
-2019,1,1580
-2019,2,1625
-2019,3,1720
-2019,4,2950
-2019,5,3600
-2019,6,2450
-2019,7,1520
-2019,8,1180
-2019,9,1150
-2019,10,1320
-2019,11,1950
-2019,12,2250
-2020,1,1650
-2020,2,1720
-2020,3,1850
-2020,4,3100
-2020,5,3800
-2020,6,2600
-2020,7,1680
-2020,8,1250
-2020,9,1220
-2020,10,1400
-2020,11,2050
-2020,12,2350
-2021,1,1700
-2021,2,1780
-2021,3,1920
-2021,4,3250
-2021,5,3950
-2021,6,2750
-2021,7,1750
-2021,8,1320
-2021,9,1280
-2021,10,1480
-2021,11,2150
-2021,12,2450
-2022,1,1820
-2022,2,1920
-2022,3,2100
-2022,4,3500
-2022,5,4200
-2022,6,2950
-2022,7,1920
-2022,8,1450
-2022,9,1350
-2022,10,1650
-2022,11,2350
-2022,12,2650
-2023,1,1950
-2023,2,2100
-2023,3,1200
-2023,4,800
-2023,5,950
-2023,6,1400
-2023,7,1850
-2023,8,1650
-2023,9,1550
-2023,10,1720
-2023,11,2450
-2023,12,2800
-2024,1,2200
-2024,2,2400
-2024,3,1350
-2024,4,950
-2024,5,1100
-2024,6,1650
-2024,7,2100
-2024,8,1920
-2024,9,1820
-2024,10,1980
-2024,11,2650
+commodity,year,month,price
+Tomato,2015,1,1800
+Tomato,2015,2,1600
+Tomato,2015,3,1400
+Tomato,2015,4,1200
+Tomato,2015,5,1500
+Tomato,2015,6,2000
+Tomato,2015,7,2500
+Tomato,2015,8,2200
+Tomato,2015,9,1800
+Tomato,2015,10,1200
+Tomato,2015,11,1600
+Tomato,2015,12,2000
+Tomato,2016,1,1700
+Tomato,2016,2,1500
+Tomato,2016,3,1300
+Tomato,2016,4,1100
+Tomato,2016,5,1400
+Tomato,2016,6,1900
+Tomato,2016,7,2400
+Tomato,2016,8,2100
+Tomato,2016,9,1700
+Tomato,2016,10,1100
+Tomato,2016,11,1500
+Tomato,2016,12,1900
+Tomato,2017,1,1750
+Tomato,2017,2,1600
+Tomato,2017,3,1450
+Tomato,2017,4,900
+Tomato,2017,5,950
+Tomato,2017,6,1800
+Tomato,2017,7,2600
+Tomato,2017,8,2300
+Tomato,2017,9,1850
+Tomato,2017,10,1300
+Tomato,2017,11,1650
+Tomato,2017,12,2100
+Tomato,2018,1,1850
+Tomato,2018,2,1700
+Tomato,2018,3,1550
+Tomato,2018,4,2800
+Tomato,2018,5,3200
+Tomato,2018,6,2200
+Tomato,2018,7,1500
+Tomato,2018,8,1300
+Tomato,2018,9,1200
+Tomato,2018,10,1350
+Tomato,2018,11,1800
+Tomato,2018,12,2200
+Tomato,2019,1,1900
+Tomato,2019,2,1750
+Tomato,2019,3,1600
+Tomato,2019,4,3000
+Tomato,2019,5,3400
+Tomato,2019,6,2400
+Tomato,2019,7,1550
+Tomato,2019,8,1350
+Tomato,2019,9,1250
+Tomato,2019,10,1450
+Tomato,2019,11,1900
+Tomato,2019,12,2300
+Tomato,2020,1,2000
+Tomato,2020,2,1850
+Tomato,2020,3,1700
+Tomato,2020,4,800
+Tomato,2020,5,850
+Tomato,2020,6,2100
+Tomato,2020,7,2700
+Tomato,2020,8,2400
+Tomato,2020,9,1900
+Tomato,2020,10,1500
+Tomato,2020,11,2000
+Tomato,2020,12,2500
+Tomato,2021,1,2100
+Tomato,2021,2,1950
+Tomato,2021,3,1800
+Tomato,2021,4,3200
+Tomato,2021,5,3600
+Tomato,2021,6,2600
+Tomato,2021,7,1800
+Tomato,2021,8,1550
+Tomato,2021,9,1450
+Tomato,2021,10,1650
+Tomato,2021,11,2150
+Tomato,2021,12,2700
+Tomato,2022,1,2200
+Tomato,2022,2,2050
+Tomato,2022,3,1900
+Tomato,2022,4,3400
+Tomato,2022,5,3800
+Tomato,2022,6,2800
+Tomato,2022,7,1900
+Tomato,2022,8,1650
+Tomato,2022,9,1550
+Tomato,2022,10,1750
+Tomato,2022,11,2300
+Tomato,2022,12,2900
+Tomato,2023,1,2300
+Tomato,2023,2,2150
+Tomato,2023,3,2000
+Tomato,2023,4,1000
+Tomato,2023,5,1050
+Tomato,2023,6,2400
+Tomato,2023,7,3000
+Tomato,2023,8,2700
+Tomato,2023,9,2100
+Tomato,2023,10,1850
+Tomato,2023,11,2500
+Tomato,2023,12,3100
+Tomato,2024,1,2400
+Tomato,2024,2,2250
+Tomato,2024,3,2100
+Tomato,2024,4,1100
+Tomato,2024,5,1150
+Tomato,2024,6,2600
+Tomato,2024,7,3200
+Tomato,2024,8,2900
+Tomato,2024,9,2250
+Tomato,2024,10,1950
+Tomato,2024,11,2700
+Tomato,2024,12,3300
+
+Onion,2015,1,1200
+Onion,2015,2,1100
+Onion,2015,3,1000
+Onion,2015,4,900
+Onion,2015,5,800
+Onion,2015,6,1200
+Onion,2015,7,1500
+Onion,2015,8,2000
+Onion,2015,9,1800
+Onion,2015,10,1400
+Onion,2015,11,1300
+Onion,2015,12,1200
+Onion,2016,1,1250
+Onion,2016,2,1150
+Onion,2016,3,1050
+Onion,2016,4,950
+Onion,2016,5,850
+Onion,2016,6,1300
+Onion,2016,7,1600
+Onion,2016,8,2100
+Onion,2016,9,1900
+Onion,2016,10,1450
+Onion,2016,11,1350
+Onion,2016,12,1250
+Onion,2017,1,1300
+Onion,2017,2,1200
+Onion,2017,3,1100
+Onion,2017,4,1000
+Onion,2017,5,900
+Onion,2017,6,1350
+Onion,2017,7,1700
+Onion,2017,8,2200
+Onion,2017,9,2000
+Onion,2017,10,1500
+Onion,2017,11,1400
+Onion,2017,12,1300
+Onion,2018,1,1400
+Onion,2018,2,1300
+Onion,2018,3,1200
+Onion,2018,4,1100
+Onion,2018,5,1000
+Onion,2018,6,1500
+Onion,2018,7,1900
+Onion,2018,8,2600
+Onion,2018,9,2400
+Onion,2018,10,1800
+Onion,2018,11,1600
+Onion,2018,12,1500
+Onion,2019,1,1600
+Onion,2019,2,1500
+Onion,2019,3,1400
+Onion,2019,4,400
+Onion,2019,5,500
+Onion,2019,6,900
+Onion,2019,7,1300
+Onion,2019,8,1800
+Onion,2019,9,1600
+Onion,2019,10,1200
+Onion,2019,11,1100
+Onion,2019,12,1000
+Onion,2020,1,1500
+Onion,2020,2,1400
+Onion,2020,3,1300
+Onion,2020,4,1200
+Onion,2020,5,1100
+Onion,2020,6,1600
+Onion,2020,7,2000
+Onion,2020,8,2800
+Onion,2020,9,2600
+Onion,2020,10,2000
+Onion,2020,11,1800
+Onion,2020,12,1700
+Onion,2021,1,1700
+Onion,2021,2,1600
+Onion,2021,3,1500
+Onion,2021,4,1400
+Onion,2021,5,1300
+Onion,2021,6,1800
+Onion,2021,7,2300
+Onion,2021,8,3100
+Onion,2021,9,2900
+Onion,2021,10,2200
+Onion,2021,11,2000
+Onion,2021,12,1900
+Onion,2022,1,1800
+Onion,2022,2,1700
+Onion,2022,3,1600
+Onion,2022,4,1500
+Onion,2022,5,1400
+Onion,2022,6,2000
+Onion,2022,7,2600
+Onion,2022,8,3400
+Onion,2022,9,3200
+Onion,2022,10,2500
+Onion,2022,11,2300
+Onion,2022,12,2200
+Onion,2023,1,1900
+Onion,2023,2,1800
+Onion,2023,3,1700
+Onion,2023,4,1600
+Onion,2023,5,1500
+Onion,2023,6,2100
+Onion,2023,7,2800
+Onion,2023,8,3600
+Onion,2023,9,3400
+Onion,2023,10,2700
+Onion,2023,11,2500
+Onion,2023,12,2400
+Onion,2024,1,2000
+Onion,2024,2,1900
+Onion,2024,3,1800
+Onion,2024,4,1700
+Onion,2024,5,1600
+Onion,2024,6,2200
+Onion,2024,7,3000
+Onion,2024,8,3800
+Onion,2024,9,3600
+Onion,2024,10,2900
+Onion,2024,11,2700
+Onion,2024,12,2600
+
+Potato,2015,1,800
+Potato,2015,2,750
+Potato,2015,3,700
+Potato,2015,4,650
+Potato,2015,5,700
+Potato,2015,6,800
+Potato,2015,7,900
+Potato,2015,8,850
+Potato,2015,9,750
+Potato,2015,10,700
+Potato,2015,11,750
+Potato,2015,12,800
+Potato,2016,1,820
+Potato,2016,2,770
+Potato,2016,3,720
+Potato,2016,4,680
+Potato,2016,5,730
+Potato,2016,6,830
+Potato,2016,7,940
+Potato,2016,8,890
+Potato,2016,9,780
+Potato,2016,10,730
+Potato,2016,11,780
+Potato,2016,12,830
+Potato,2017,1,850
+Potato,2017,2,800
+Potato,2017,3,750
+Potato,2017,4,710
+Potato,2017,5,760
+Potato,2017,6,860
+Potato,2017,7,980
+Potato,2017,8,920
+Potato,2017,9,810
+Potato,2017,10,760
+Potato,2017,11,810
+Potato,2017,12,860
+Potato,2018,1,880
+Potato,2018,2,830
+Potato,2018,3,780
+Potato,2018,4,740
+Potato,2018,5,790
+Potato,2018,6,900
+Potato,2018,7,1020
+Potato,2018,8,960
+Potato,2018,9,840
+Potato,2018,10,790
+Potato,2018,11,840
+Potato,2018,12,900
+Potato,2019,1,920
+Potato,2019,2,870
+Potato,2019,3,820
+Potato,2019,4,780
+Potato,2019,5,830
+Potato,2019,6,950
+Potato,2019,7,1080
+Potato,2019,8,1020
+Potato,2019,9,900
+Potato,2019,10,850
+Potato,2019,11,900
+Potato,2019,12,950
+Potato,2020,1,950
+Potato,2020,2,900
+Potato,2020,3,850
+Potato,2020,4,800
+Potato,2020,5,850
+Potato,2020,6,980
+Potato,2020,7,1120
+Potato,2020,8,1050
+Potato,2020,9,920
+Potato,2020,10,870
+Potato,2020,11,920
+Potato,2020,12,980
+Potato,2021,1,980
+Potato,2021,2,930
+Potato,2021,3,880
+Potato,2021,4,830
+Potato,2021,5,880
+Potato,2021,6,1010
+Potato,2021,7,1160
+Potato,2021,8,1090
+Potato,2021,9,960
+Potato,2021,10,910
+Potato,2021,11,960
+Potato,2021,12,1010
+Potato,2022,1,1020
+Potato,2022,2,970
+Potato,2022,3,920
+Potato,2022,4,870
+Potato,2022,5,920
+Potato,2022,6,1060
+Potato,2022,7,1220
+Potato,2022,8,1140
+Potato,2022,9,1000
+Potato,2022,10,950
+Potato,2022,11,1000
+Potato,2022,12,1060
+Potato,2023,1,1060
+Potato,2023,2,1010
+Potato,2023,3,960
+Potato,2023,4,910
+Potato,2023,5,960
+Potato,2023,6,1100
+Potato,2023,7,1280
+Potato,2023,8,1200
+Potato,2023,9,1040
+Potato,2023,10,990
+Potato,2023,11,1040
+Potato,2023,12,1100
+Potato,2024,1,1100
+Potato,2024,2,1050
+Potato,2024,3,1000
+Potato,2024,4,950
+Potato,2024,5,1000
+Potato,2024,6,1150
+Potato,2024,7,1340
+Potato,2024,8,1250
+Potato,2024,9,1080
+Potato,2024,10,1030
+Potato,2024,11,1080
+Potato,2024,12,1150
+
+Brinjal,2015,1,1000
+Brinjal,2015,2,900
+Brinjal,2015,3,800
+Brinjal,2015,4,700
+Brinjal,2015,5,850
+Brinjal,2015,6,1100
+Brinjal,2015,7,1300
+Brinjal,2015,8,1200
+Brinjal,2015,9,1000
+Brinjal,2015,10,800
+Brinjal,2015,11,900
+Brinjal,2015,12,1100
+Brinjal,2016,1,1040
+Brinjal,2016,2,940
+Brinjal,2016,3,830
+Brinjal,2016,4,730
+Brinjal,2016,5,880
+Brinjal,2016,6,1140
+Brinjal,2016,7,1350
+Brinjal,2016,8,1250
+Brinjal,2016,9,1040
+Brinjal,2016,10,830
+Brinjal,2016,11,940
+Brinjal,2016,12,1140
+Brinjal,2017,1,1080
+Brinjal,2017,2,980
+Brinjal,2017,3,870
+Brinjal,2017,4,770
+Brinjal,2017,5,920
+Brinjal,2017,6,1180
+Brinjal,2017,7,1400
+Brinjal,2017,8,1300
+Brinjal,2017,9,1080
+Brinjal,2017,10,870
+Brinjal,2017,11,980
+Brinjal,2017,12,1180
+Brinjal,2018,1,1120
+Brinjal,2018,2,1020
+Brinjal,2018,3,910
+Brinjal,2018,4,810
+Brinjal,2018,5,960
+Brinjal,2018,6,1220
+Brinjal,2018,7,1450
+Brinjal,2018,8,1350
+Brinjal,2018,9,1120
+Brinjal,2018,10,910
+Brinjal,2018,11,1020
+Brinjal,2018,12,1220
+Brinjal,2019,1,1160
+Brinjal,2019,2,1060
+Brinjal,2019,3,950
+Brinjal,2019,4,850
+Brinjal,2019,5,1000
+Brinjal,2019,6,1280
+Brinjal,2019,7,1520
+Brinjal,2019,8,1420
+Brinjal,2019,9,1160
+Brinjal,2019,10,950
+Brinjal,2019,11,1060
+Brinjal,2019,12,1280
+Brinjal,2020,1,1200
+Brinjal,2020,2,1100
+Brinjal,2020,3,990
+Brinjal,2020,4,880
+Brinjal,2020,5,1040
+Brinjal,2020,6,1320
+Brinjal,2020,7,1580
+Brinjal,2020,8,1480
+Brinjal,2020,9,1200
+Brinjal,2020,10,990
+Brinjal,2020,11,1100
+Brinjal,2020,12,1320
+Brinjal,2021,1,1250
+Brinjal,2021,2,1150
+Brinjal,2021,3,1030
+Brinjal,2021,4,920
+Brinjal,2021,5,1080
+Brinjal,2021,6,1380
+Brinjal,2021,7,1650
+Brinjal,2021,8,1550
+Brinjal,2021,9,1250
+Brinjal,2021,10,1030
+Brinjal,2021,11,1150
+Brinjal,2021,12,1380
+Brinjal,2022,1,1300
+Brinjal,2022,2,1200
+Brinjal,2022,3,1080
+Brinjal,2022,4,970
+Brinjal,2022,5,1130
+Brinjal,2022,6,1450
+Brinjal,2022,7,1750
+Brinjal,2022,8,1650
+Brinjal,2022,9,1300
+Brinjal,2022,10,1080
+Brinjal,2022,11,1200
+Brinjal,2022,12,1450
+Brinjal,2023,1,1350
+Brinjal,2023,2,1250
+Brinjal,2023,3,1130
+Brinjal,2023,4,1020
+Brinjal,2023,5,1180
+Brinjal,2023,6,1520
+Brinjal,2023,7,1850
+Brinjal,2023,8,1750
+Brinjal,2023,9,1350
+Brinjal,2023,10,1130
+Brinjal,2023,11,1250
+Brinjal,2023,12,1520
+Brinjal,2024,1,1400
+Brinjal,2024,2,1300
+Brinjal,2024,3,1180
+Brinjal,2024,4,1070
+Brinjal,2024,5,1230
+Brinjal,2024,6,1600
+Brinjal,2024,7,1950
+Brinjal,2024,8,1850
+Brinjal,2024,9,1400
+Brinjal,2024,10,1180
+Brinjal,2024,11,1300
+Brinjal,2024,12,1600
+
+Green Chilli,2015,1,2500
+Green Chilli,2015,2,2300
+Green Chilli,2015,3,2000
+Green Chilli,2015,4,2200
+Green Chilli,2015,5,2400
+Green Chilli,2015,6,2600
+Green Chilli,2015,7,2800
+Green Chilli,2015,8,2700
+Green Chilli,2015,9,2500
+Green Chilli,2015,10,2300
+Green Chilli,2015,11,2400
+Green Chilli,2015,12,2600
+Green Chilli,2016,1,2600
+Green Chilli,2016,2,2400
+Green Chilli,2016,3,2100
+Green Chilli,2016,4,2300
+Green Chilli,2016,5,2500
+Green Chilli,2016,6,2700
+Green Chilli,2016,7,2950
+Green Chilli,2016,8,2850
+Green Chilli,2016,9,2650
+Green Chilli,2016,10,2450
+Green Chilli,2016,11,2550
+Green Chilli,2016,12,2750
+Green Chilli,2017,1,2700
+Green Chilli,2017,2,2500
+Green Chilli,2017,3,2200
+Green Chilli,2017,4,2400
+Green Chilli,2017,5,2600
+Green Chilli,2017,6,2850
+Green Chilli,2017,7,3100
+Green Chilli,2017,8,3000
+Green Chilli,2017,9,2800
+Green Chilli,2017,10,2600
+Green Chilli,2017,11,2700
+Green Chilli,2017,12,2900
+Green Chilli,2018,1,2800
+Green Chilli,2018,2,2600
+Green Chilli,2018,3,2300
+Green Chilli,2018,4,2500
+Green Chilli,2018,5,2700
+Green Chilli,2018,6,3000
+Green Chilli,2018,7,3300
+Green Chilli,2018,8,3200
+Green Chilli,2018,9,3000
+Green Chilli,2018,10,2800
+Green Chilli,2018,11,2900
+Green Chilli,2018,12,3100
+Green Chilli,2019,1,2900
+Green Chilli,2019,2,2700
+Green Chilli,2019,3,2400
+Green Chilli,2019,4,2600
+Green Chilli,2019,5,2800
+Green Chilli,2019,6,3100
+Green Chilli,2019,7,3500
+Green Chilli,2019,8,3400
+Green Chilli,2019,9,3200
+Green Chilli,2019,10,3000
+Green Chilli,2019,11,3100
+Green Chilli,2019,12,3300
+Green Chilli,2020,1,3000
+Green Chilli,2020,2,2800
+Green Chilli,2020,3,2500
+Green Chilli,2020,4,2700
+Green Chilli,2020,5,2900
+Green Chilli,2020,6,3200
+Green Chilli,2020,7,3600
+Green Chilli,2020,8,3500
+Green Chilli,2020,9,3300
+Green Chilli,2020,10,3100
+Green Chilli,2020,11,3200
+Green Chilli,2020,12,3400
+Green Chilli,2021,1,3150
+Green Chilli,2021,2,2950
+Green Chilli,2021,3,2650
+Green Chilli,2021,4,2850
+Green Chilli,2021,5,3050
+Green Chilli,2021,6,3350
+Green Chilli,2021,7,3750
+Green Chilli,2021,8,3650
+Green Chilli,2021,9,3450
+Green Chilli,2021,10,3250
+Green Chilli,2021,11,3350
+Green Chilli,2021,12,3550
+Green Chilli,2022,1,3300
+Green Chilli,2022,2,3100
+Green Chilli,2022,3,2800
+Green Chilli,2022,4,3000
+Green Chilli,2022,5,3200
+Green Chilli,2022,6,3500
+Green Chilli,2022,7,3950
+Green Chilli,2022,8,3850
+Green Chilli,2022,9,3650
+Green Chilli,2022,10,3450
+Green Chilli,2022,11,3550
+Green Chilli,2022,12,3750
+Green Chilli,2023,1,3450
+Green Chilli,2023,2,3250
+Green Chilli,2023,3,2950
+Green Chilli,2023,4,3150
+Green Chilli,2023,5,3350
+Green Chilli,2023,6,3650
+Green Chilli,2023,7,4150
+Green Chilli,2023,8,4050
+Green Chilli,2023,9,3850
+Green Chilli,2023,10,3650
+Green Chilli,2023,11,3750
+Green Chilli,2023,12,3950
+Green Chilli,2024,1,3600
+Green Chilli,2024,2,3400
+Green Chilli,2024,3,3100
+Green Chilli,2024,4,3300
+Green Chilli,2024,5,3500
+Green Chilli,2024,6,3800
+Green Chilli,2024,7,4350
+Green Chilli,2024,8,4250
+Green Chilli,2024,9,4050
+Green Chilli,2024,10,3850
+Green Chilli,2024,11,3950
+Green Chilli,2024,12,4200
