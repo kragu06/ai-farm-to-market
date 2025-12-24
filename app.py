@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="AI Farm-to-Market Cockpit", layout="wide")
+st.caption("Built to reduce distress sales by combining market memory, AI reasoning, and execution support.")
 
 # =========================
 # LOAD DATA
