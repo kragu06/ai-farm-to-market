@@ -210,6 +210,26 @@ infra = pd.DataFrame({
 })
 
 st.table(infra)
+st.subheader("🚀 Take Action")
+
+if st.button("Proceed with AI Recommendation"):
+    st.success(
+        f"""
+        ✅ Action Confirmed!
+
+        • Selected Option: **{best_option}**  
+        • Quantity: **{quantity} kg**  
+        • Next step: Initiating execution workflow.
+        """
+    )
+
+    st.info(
+        "📋 Next Steps:\n"
+        "• Contact nearby facility\n"
+        "• Reserve slot\n"
+        "• Arrange transport\n"
+        "• Monitor price recovery window"
+    )
 
 if "High" in worst_month["risk"]:
     best_option = "Solar Dryer"
