@@ -44,7 +44,10 @@ st.subheader("👨‍🌾 Context")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    crop = st.selectbox("Crop", ["Tomato"])
+    crop = st.selectbox(
+    "Commodity",
+    sorted(data["commodity"].unique())
+    )
 
 with col2:
     quantity = st.number_input("Quantity (kg)", min_value=100, step=100)
@@ -97,7 +100,10 @@ if farmer_location:
 # =========================
 st.subheader("📅 Market Context")
 selected_year = st.selectbox("Select Year", sorted(data["year"].unique(), reverse=True))
-year_data = data[data["year"] == selected_year]
+year_data = data[
+    (data["year"] == selected_year) &
+    (data["commodity"] == crop)
+]
 
 # =========================
 # PRICE TREND
@@ -113,10 +119,18 @@ st.pyplot(fig)
 # =========================
 # SEASONAL BASELINE
 # =========================
-seasonal_avg = data.groupby("month")["price"].mean().reset_index()
+seasonal_avg = (
+    data[data["commodity"] == crop]
+    .groupby("month")["price"]
+    .mean()
+    .reset_index()
+)
 merged = pd.merge(
     year_data, seasonal_avg, on="month", suffixes=("_current", "_seasonal")
 )
+if year_data.empty:
+    st.warning("No data available for this commodity and year.")
+    st.stop()
 
 # =========================
 # CRASH & RISK LOGIC
