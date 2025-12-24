@@ -164,16 +164,16 @@ def decision(risk, urgency):
 merged[["action", "timeframe"]] = merged.apply(
     lambda r: pd.Series(decision(r["risk"], urgency)), axis=1
 )
-st.subheader("🧾 Final AI Verdict")
-
-latest = merged.iloc[-1]
-
-st.success(
+st.markdown(
     f"""
-    **Recommended Action:** {latest['action']}  
-    **Timeframe:** {latest['timeframe']}  
-    **Risk Level:** {latest['risk']}
-    """
+    <div class="card">
+        <h3>🧾 Final AI Verdict</h3>
+        <b>Recommended Action:</b> {latest['action']}<br>
+        <b>Timeframe:</b> {latest['timeframe']}<br>
+        <b>Risk Level:</b> {latest['risk']}
+    </div>
+    """,
+    unsafe_allow_html=True
 )
 
 # =========================
@@ -183,9 +183,16 @@ worst_month = merged.sort_values("deviation_pct").iloc[0]
 loss_est = abs(worst_month["deviation_pct"]) * worst_month["price_seasonal"] / 100
 
 if "High" in worst_month["risk"]:
-    st.error(
-        f"⚠️ Worst-case warning: Selling in {worst_month['month_name']} "
-        f"could mean ~₹{int(loss_est)} loss per unit vs seasonal average."
+    st.markdown(
+        f"""
+        <div class="card" style="background-color:#ffebee;">
+            <h4>⚠️ Worst-case Warning</h4>
+            Selling in <b>{worst_month['month_name']}</b> could mean an
+            estimated loss of <b>₹{int(loss_est)}</b> per unit compared
+            to seasonal average.
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
 # =========================
