@@ -110,25 +110,8 @@ infra_type = st.selectbox(
 if farmer_location:
     search_query = infra_type.replace(" ", "+")
     maps_url = f"https://www.google.com/maps/search/{search_query}+near+{farmer_location}"
+    st.markdown(f"[👉 Open {infra_type} in Google Maps]({maps_url})")
 
-    st.markdown(
-    f"""
-    <div style="
-        background:{bg_color};
-        padding:35px;
-        border-radius:18px;
-        text-align:center;
-        box-shadow:0 6px 18px rgba(0,0,0,0.15);
-        margin-bottom:30px;
-    ">
-        <h1>{emoji} AI DECISION</h1>
-        <h2>{action}</h2>
-        <h4>{timeframe}</h4>
-        <p><b>Risk Level:</b> {risk}</p>
-    </div>
-    """,
-    unsafe_allow_html=True
-    )
 
 # =========================
 # YEAR SELECTION
@@ -143,7 +126,10 @@ current_price = commodity_data.tail(recent_window)["price"].mean()
 
 # =========================
 # PRICE TREND (ALL YEARS – SEASONAL PATTERN)
-# =========================
+# =============if farmer_location:
+    search_query = infra_type.replace(" ", "+")
+    maps_url = f"https://www.google.com/maps/search/{search_query}+near+{farmer_location}"
+    st.markdown(f"[👉 Open {infra_type} in Google Maps]({maps_url})")============
 st.subheader("📈 Long-Term Seasonal Price Pattern")
 
 seasonal_plot = (
