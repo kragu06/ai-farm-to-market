@@ -165,18 +165,36 @@ merged[["action", "timeframe"]] = merged.apply(
     lambda r: pd.Series(decision(r["risk"], urgency)), axis=1
 )
 latest = merged.iloc[-1]
+risk = latest["risk"]
+
+if "High" in risk:
+    bg_color = "#ffebee"
+    emoji = "🚨"
+elif "Medium" in risk:
+    bg_color = "#fff8e1"
+    emoji = "⚠️"
+else:
+    bg_color = "#e8f5e9"
+    emoji = "✅"
+
 st.markdown(
     f"""
-    <div class="card">
-        <h3>🧾 Final AI Verdict</h3>
-        <b>Recommended Action:</b> {latest['action']}<br>
-        <b>Timeframe:</b> {latest['timeframe']}<br>
-        <b>Risk Level:</b> {latest['risk']}
+    <div style="
+        background:{bg_color};
+        padding:35px;
+        border-radius:18px;
+        text-align:center;
+        box-shadow:0 6px 18px rgba(0,0,0,0.15);
+        margin-bottom:30px;
+    ">
+        <h1 style="margin-bottom:10px;">{emoji} AI DECISION</h1>
+        <h2 style="margin-bottom:5px;">{latest['action']}</h2>
+        <h4 style="margin-top:5px;">{latest['timeframe']}</h4>
+        <p style="font-size:16px;"><b>Risk Level:</b> {latest['risk']}</p>
     </div>
     """,
     unsafe_allow_html=True
 )
-
 # =========================
 # WORST-CASE WARNING
 # =========================
