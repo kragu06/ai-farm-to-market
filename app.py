@@ -23,6 +23,33 @@ st.caption("Built to reduce distress sales by combining market memory, AI reason
 # LOAD DATA
 # =========================
 data = pd.read_csv("price_data.csv")
+commodity_crash_rules = {
+    "Tomato": {
+        "crash_months": [4, 5],
+        "reason": "Seasonal oversupply and harvest glut",
+        "severity": "High"
+    },
+    "Onion": {
+        "crash_months": [4, 5, 6],
+        "reason": "Export restrictions and storage release",
+        "severity": "Very High"
+    },
+    "Potato": {
+        "crash_months": [3, 4],
+        "reason": "Post-harvest arrivals buffered by cold storage",
+        "severity": "Low"
+    },
+    "Brinjal": {
+        "crash_months": [6, 7],
+        "reason": "Local market saturation",
+        "severity": "Medium"
+    },
+    "Green Chilli": {
+        "crash_months": [],
+        "reason": "High demand volatility, rarely crashes",
+        "severity": "Low"
+    }
+}
 
 month_map = {
     1:"Jan", 2:"Feb", 3:"Mar", 4:"Apr", 5:"May", 6:"Jun",
@@ -179,6 +206,43 @@ merged[["action", "timeframe"]] = merged.apply(
     lambda r: pd.Series(decision(r["risk"], urgency)), axis=1
 )
 latest = merged.iloc[-1]
+risk = latest["risk"]
+
+if "High" in risk:
+    bg_color = "#ffebee"
+    emoji = "🚨"
+elif "Medium" in risk:
+    bg_color = "#fff8e1"
+    emoji = "⚠️"
+else:
+    bg_color = "#e8f5e9"
+    emoji = "✅"
+
+st.markdown(
+    f"""
+    <div style="...">
+        <h1>{emoji} AI DECISION</h1>
+        <h2>{latest['action']}</h2>
+        <h4>{latest['timeframe']}</h4>
+        <p><b>Risk Level:</b> {latest['risk']}</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+current_month = int(latest["month"])
+
+crash_info = commodity_crash_rules.get(crop, None)
+
+crash_flag = False
+crash_message = ""
+
+if crash_info and current_month in crash_info["crash_months"]:
+    crash_flag = True
+    crash_message = (
+        f"⚠️ **{crop} Crash Window Detected**\n\n"
+        f"• Reason: {crash_info['reason']}\n"
+        f"• Expected Severity: {crash_info['severity']}"
+    )
 risk = latest["risk"]
 
 if "High" in risk:
