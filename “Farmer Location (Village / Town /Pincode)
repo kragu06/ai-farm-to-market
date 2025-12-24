@@ -1,0 +1,1 @@
+location = st.text_input("Farmer Location (Village / Town / Pin code)")
