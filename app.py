@@ -206,9 +206,10 @@ def decision(risk, urgency):
         return "Hold", "Review after 2 weeks"
     return "Sell", "Sell within 7 days"
 
-merged[["action", "timeframe"]] = merged.apply(
-    lambda r: pd.Series(decision(r["risk"], urgency)), axis=1
-)
+# =========================
+# DECISION ENGINE (SINGLE, ALL-YEARS)
+# =========================
+action, timeframe = decision(risk, urgency)
 latest = merged.iloc[-1]
 risk = risk
 
