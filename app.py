@@ -257,3 +257,7 @@ if future_mode:
         "weather alerts, government policy notifications, "
         "and automated buyer matching using cloud AI services."
     )
+st.caption(
+    "Note: This prototype demonstrates decision intelligence using historical data. "
+    "Live integrations are part of the deployment roadmap."
+)
