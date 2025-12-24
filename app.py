@@ -44,7 +44,6 @@ infra_type = st.selectbox(
         "Government Warehouse"
     ]
 )
-
     col1, col2, col3 = st.columns(3)
 with col1:
     crop = st.selectbox("Crop", ["Tomato"])
