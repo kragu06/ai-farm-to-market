@@ -245,10 +245,10 @@ st.markdown(
         box-shadow:0 6px 18px rgba(0,0,0,0.15);
         margin-bottom:30px;
     ">
-        <h1 style="margin-bottom:10px;">{emoji} AI DECISION</h1>
-        <h2 style="margin-bottom:5px;">{latest['action']}</h2>
-        <h4 style="margin-top:5px;">{latest['timeframe']}</h4>
-        <p style="font-size:16px;"><b>Risk Level:</b> {latest['risk']}</p>
+        <h1>{emoji} AI DECISION</h1>
+        <h2 style="margin-bottom:5px;">{action}</h2>
+        <h4 style="margin-top:5px;">{timeframe}</h4>
+        <p><b>Risk Level:</b> {risk}</p>
     </div>
     """,
     unsafe_allow_html=True
