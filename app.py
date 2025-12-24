@@ -25,6 +25,32 @@ st.caption("Decision + Execution + Handholding | Outcome-based model")
 # CONTEXT PANEL
 # =========================
 st.subheader("👨‍🌾 Context")
+st.subheader("📍 Farmer Location")
+
+farmer_location = st.text_input(
+    "Enter Village / Town / District / Pin Code",
+    placeholder="Example: Kolar, Karnataka or 563101"
+)
+st.subheader("🏗️ Required Infrastructure")
+
+infra_type = st.selectbox(
+    "Select Infrastructure Type",
+    [
+        "Solar Dryer",
+        "Cold Storage",
+        "Market / Mandi",
+        "Government Warehouse"
+    ]
+)
+if farmer_location:
+    search_query = infra_type.replace(" ", "+")
+    maps_url = f"https://www.google.com/maps/search/{search_query}+near+{farmer_location}"
+
+    st.markdown(
+        f"### 🗺️ Nearby {infra_type}\n"
+        f"[👉 Open in Google Maps]({maps_url})",
+        unsafe_allow_html=True
+    )
 col1, col2, col3 = st.columns(3)
 with col1:
     crop = st.selectbox("Crop", ["Tomato"])
@@ -193,3 +219,4 @@ st.write(
     "♻️ Lower post-harvest waste\n\n"
     "🌞 Better utilization of rural infrastructure"
 )
+Add Google Maps integration for nearby infrastructure
