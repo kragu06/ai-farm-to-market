@@ -219,4 +219,3 @@ st.write(
     "♻️ Lower post-harvest waste\n\n"
     "🌞 Better utilization of rural infrastructure"
 )
-Add Google Maps integration for nearby infrastructure
