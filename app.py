@@ -183,10 +183,9 @@ def risk_label(dev):
 risk = risk_label(deviation_pct)
 
 # =========================
-# MARKET HEALTH SCORE
+# MARKET HEALTH SCORE (ALL-YEARS LOGIC)
 # =========================
-avg_dev = merged["deviation_pct"].mean()
-health_score = int(max(0, min(100, 60 + avg_dev)))
+health_score = int(max(0, min(100, 60 + deviation_pct)))
 
 if health_score < 35:
     health_text = "🔴 Dangerous"
