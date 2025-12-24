@@ -41,6 +41,13 @@ infra_type = st.selectbox(
         "Market / Mandi",
         "Government Warehouse"
     ]
+    col1, col2, col3 = st.columns(3)
+with col1:
+    crop = st.selectbox("Crop", ["Tomato"])
+with col2:
+    quantity = st.number_input("Quantity (kg)", min_value=100, step=100)
+with col3:
+    urgency = st.selectbox("Farmer Urgency", ["Low", "Medium", "High"])
 )
 if farmer_location:
     search_query = infra_type.replace(" ", "+")
@@ -51,13 +58,6 @@ if farmer_location:
         f"[👉 Open in Google Maps]({maps_url})",
         unsafe_allow_html=True
     )
-col1, col2, col3 = st.columns(3)
-with col1:
-    crop = st.selectbox("Crop", ["Tomato"])
-with col2:
-    quantity = st.number_input("Quantity (kg)", min_value=100, step=100)
-with col3:
-    urgency = st.selectbox("Farmer Urgency", ["Low", "Medium", "High"])
 
 # =========================
 # YEAR SELECTION
