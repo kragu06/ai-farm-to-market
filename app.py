@@ -168,9 +168,6 @@ seasonal_price = seasonal_avg.loc[
 ].values[0]
 
 deviation_pct = ((current_price - seasonal_price) / seasonal_price) * 100
-merged = pd.merge(
-    year_data, seasonal_avg, on="month", suffixes=("_current", "_seasonal")
-)
 if year_data.empty:
     st.warning("No data available for this commodity and year.")
     st.stop()
