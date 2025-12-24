@@ -121,11 +121,12 @@ if farmer_location:
 # YEAR SELECTION
 # =========================
 st.subheader("📅 Market Context")
-selected_year = st.selectbox("Select Year", sorted(data["year"].unique(), reverse=True))
-year_data = data[
-    (data["year"] == selected_year) &
-    (data["commodity"] == crop)
-]
+commodity_data = data[data["commodity"] == crop]
+# =========================
+# STEP 4: CURRENT PRICE LEVEL (YEAR-AGNOSTIC)
+# =========================
+recent_window = 6  # last 6 data points
+current_price = commodity_data.tail(recent_window)["price"].mean()
 
 # =========================
 # PRICE TREND
@@ -147,6 +148,16 @@ seasonal_avg = (
     .mean()
     .reset_index()
 )
+# =========================
+# STEP 5: SEASONAL COMPARISON (ALL YEARS)
+# =========================
+current_month = pd.Timestamp.now().month
+
+seasonal_price = seasonal_avg.loc[
+    seasonal_avg["month"] == current_month, "price"
+].values[0]
+
+deviation_pct = ((current_price - seasonal_price) / seasonal_price) * 100
 merged = pd.merge(
     year_data, seasonal_avg, on="month", suffixes=("_current", "_seasonal")
 )
@@ -157,11 +168,6 @@ if year_data.empty:
 # =========================
 # CRASH & RISK LOGIC
 # =========================
-merged["deviation_pct"] = (
-    (merged["price_current"] - merged["price_seasonal"]) /
-    merged["price_seasonal"]
-) * 100
-
 def risk_label(dev):
     if dev < -30:
         return "🔴 High Crash Risk"
@@ -170,7 +176,7 @@ def risk_label(dev):
     else:
         return "🟢 Normal"
 
-merged["risk"] = merged["deviation_pct"].apply(risk_label)
+risk = risk_label(deviation_pct)
 
 # =========================
 # MARKET HEALTH SCORE
@@ -201,7 +207,7 @@ merged[["action", "timeframe"]] = merged.apply(
     lambda r: pd.Series(decision(r["risk"], urgency)), axis=1
 )
 latest = merged.iloc[-1]
-risk = latest["risk"]
+risk = risk
 
 if "High" in risk:
     bg_color = "#ffebee"
