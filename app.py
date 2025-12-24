@@ -3,6 +3,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="AI Farm-to-Market Cockpit", layout="wide")
+st.markdown(
+    """
+    <style>
+    .card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        margin-bottom: 20px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 st.caption("Built to reduce distress sales by combining market memory, AI reasoning, and execution support.")
 
 # =========================
