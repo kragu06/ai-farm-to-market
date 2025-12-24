@@ -131,6 +131,17 @@ def decision(risk, urgency):
 merged[["action", "timeframe"]] = merged.apply(
     lambda r: pd.Series(decision(r["risk"], urgency)), axis=1
 )
+st.subheader("🧾 Final AI Verdict")
+
+latest = merged.iloc[-1]
+
+st.success(
+    f"""
+    **Recommended Action:** {latest['action']}  
+    **Timeframe:** {latest['timeframe']}  
+    **Risk Level:** {latest['risk']}
+    """
+)
 
 # =========================
 # WORST-CASE WARNING
@@ -161,6 +172,12 @@ st.table(infra)
 
 best_option = "Solar Dryer" if health_score < 60 else "Fresh Sale"
 st.success(f"✅ Best Option Right Now: **{best_option}**")
+if "High" in worst_month["risk"]:
+    best_option = "Solar Dryer"
+elif "Medium" in worst_month["risk"]:
+    best_option = "Cold Storage"
+else:
+    best_option = "Fresh Sale"
 
 # =========================
 # VALUE ADD MARGIN
@@ -198,6 +215,16 @@ st.info(
     "During such windows, storage or processing reduces downside risk and improves net income. "
     "When prices align with or exceed seasonal norms, immediate selling is recommended."
 )
+st.subheader("⬇ Download Decision Report")
+
+csv = merged.to_csv(index=False)
+
+st.download_button(
+    "Download Decision CSV",
+    csv,
+    "decision_report.csv",
+    "text/csv"
+)
 
 # =========================
 # HANDHOLDING MODEL
@@ -219,3 +246,13 @@ st.write(
     "♻️ Lower post-harvest waste\n\n"
     "🌞 Better utilization of rural infrastructure"
 )
+st.subheader("🔮 Future Roadmap")
+
+future_mode = st.toggle("Show Future Capabilities")
+
+if future_mode:
+    st.info(
+        "Future versions will integrate live mandi prices, "
+        "weather alerts, government policy notifications, "
+        "and automated buyer matching using cloud AI services."
+    )
