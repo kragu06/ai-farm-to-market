@@ -223,7 +223,6 @@ def decision(risk, urgency):
 # DECISION ENGINE (SINGLE, ALL-YEARS)
 # =========================
 action, timeframe = decision(risk, urgency)
-latest = merged.iloc[-1]
 risk = risk
 
 if "High" in risk:
