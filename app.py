@@ -44,7 +44,28 @@ infra_type = st.selectbox(
         "Government Warehouse"
     ]
 )
-    col1, col2, col3 = st.columns(3)
+
+if farmer_location:
+    search_query = infra_type.replace(" ", "+")
+    maps_url = f"https://www.google.com/maps/search/{search_query}+near+{farmer_location}"
+
+    st.markdown(
+        f"### 🗺️ Nearby {infra_type}\n"
+        f"[👉 Open in Google Maps]({maps_url})",
+        unsafe_allow_html=True
+    )
+
+# ---- Context columns start here (NO INDENT) ----
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    crop = st.selectbox("Crop", ["Tomato"])
+
+with col2:
+    quantity = st.number_input("Quantity (kg)", min_value=100, step=100)
+
+with col3:
+    urgency = st.selectbox("Farmer Urgency", ["Low", "Medium", "High"])
 with col1:
     crop = st.selectbox("Crop", ["Tomato"])
 with col2:
