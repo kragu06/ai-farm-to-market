@@ -164,6 +164,7 @@ def decision(risk, urgency):
 merged[["action", "timeframe"]] = merged.apply(
     lambda r: pd.Series(decision(r["risk"], urgency)), axis=1
 )
+latest = merged.iloc[-1]
 st.markdown(
     f"""
     <div class="card">
