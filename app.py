@@ -129,14 +129,24 @@ recent_window = 6  # last 6 data points
 current_price = commodity_data.tail(recent_window)["price"].mean()
 
 # =========================
-# PRICE TREND
+# PRICE TREND (ALL YEARS – SEASONAL PATTERN)
 # =========================
-st.subheader("📈 Monthly Price Trend")
+st.subheader("📈 Long-Term Seasonal Price Pattern")
+
+seasonal_plot = (
+    commodity_data
+    .groupby("month")["price"]
+    .mean()
+    .reset_index()
+)
+
+seasonal_plot["month_name"] = seasonal_plot["month"].map(month_map)
+
 fig, ax = plt.subplots()
-ax.plot(year_data["month_name"], year_data["price"], marker="o")
+ax.plot(seasonal_plot["month_name"], seasonal_plot["price"], marker="o")
 ax.set_xlabel("Month")
-ax.set_ylabel("Price (₹)")
-ax.set_title(f"{crop} Prices – {selected_year}")
+ax.set_ylabel("Average Price (₹)")
+ax.set_title(f"{crop} – Historical Seasonal Pattern")
 st.pyplot(fig)
 
 # =========================
