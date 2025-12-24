@@ -170,14 +170,14 @@ infra = pd.DataFrame({
 
 st.table(infra)
 
-best_option = "Solar Dryer" if health_score < 60 else "Fresh Sale"
-st.success(f"✅ Best Option Right Now: **{best_option}**")
 if "High" in worst_month["risk"]:
     best_option = "Solar Dryer"
 elif "Medium" in worst_month["risk"]:
     best_option = "Cold Storage"
 else:
     best_option = "Fresh Sale"
+
+st.success(f"✅ Best Option Right Now: **{best_option}**")
 
 # =========================
 # VALUE ADD MARGIN
