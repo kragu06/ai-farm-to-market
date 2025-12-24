@@ -369,7 +369,33 @@ st.caption(
     "Note: Leads are generated using historical demand patterns. "
     "Live buyer discovery via e-commerce & wholesale APIs is part of future roadmap."
 )
+# =========================
+# AVAIL AI LEADS
+# =========================
+st.subheader("🚀 Avail AI-Identified Leads")
 
+if st.button("Request Buyer Connection"):
+    st.success(
+        "✅ Request registered successfully!\n\n"
+        "Our platform team will:\n"
+        "• Contact verified buyers\n"
+        "• Match quality & quantity\n"
+        "• Negotiate best possible price\n"
+        "• Coordinate logistics\n\n"
+        "⏳ Expected response time: 24–48 hours"
+    )
+    # =========================
+# HANDHOLDING EXPLANATION (STEP 2)
+# =========================
+st.info(
+    "🤝 **How the Handholding Works:**\n\n"
+    "• Farmer does NOT chase buyers\n"
+    "• Platform aggregates produce\n"
+    "• Platform negotiates pricing\n"
+    "• Farmer approves final deal\n"
+    "• Payment after successful sale\n\n"
+    "No upfront cost. Platform earns only if farmer earns."
+)
 # =========================
 # DOWNLOAD
 # =========================
