@@ -168,9 +168,6 @@ seasonal_price = seasonal_avg.loc[
 ].values[0]
 
 deviation_pct = ((current_price - seasonal_price) / seasonal_price) * 100
-if year_data.empty:
-    st.warning("No data available for this commodity and year.")
-    st.stop()
 
 # =========================
 # CRASH & RISK LOGIC
