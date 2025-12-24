@@ -32,6 +32,7 @@ farmer_location = st.text_input(
     "Enter Village / Town / District / Pin Code",
     placeholder="Example: Kolar, Karnataka or 563101"
 )
+
 st.subheader("🏗️ Required Infrastructure")
 
 infra_type = st.selectbox(
@@ -43,6 +44,7 @@ infra_type = st.selectbox(
         "Government Warehouse"
     ]
 )
+
     col1, col2, col3 = st.columns(3)
 with col1:
     crop = st.selectbox("Crop", ["Tomato"])
