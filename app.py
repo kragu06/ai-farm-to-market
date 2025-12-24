@@ -23,6 +23,10 @@ st.caption("Built to reduce distress sales by combining market memory, AI reason
 # LOAD DATA
 # =========================
 data = pd.read_csv("price_data.csv")
+required_cols = {"commodity", "year", "month", "price"}
+if not required_cols.issubset(data.columns):
+    st.error("CSV file format incorrect. Required columns: commodity, year, month, price")
+    st.stop()
 commodity_crash_rules = {
     "Tomato": {
         "crash_months": [4, 5],
@@ -102,15 +106,6 @@ infra_type = st.selectbox(
         "Government Warehouse"
     ]
 )
-
-if farmer_location:
-    search_query = infra_type.replace(" ", "+")
-    maps_url = f"https://www.google.com/maps/search/{search_query}+near+{farmer_location}"
-
-    st.markdown(
-        f"### 🗺️ Nearby {infra_type}\n"
-        f"[👉 Open in Google Maps]({maps_url})"
-    )
 
 if farmer_location:
     search_query = infra_type.replace(" ", "+")
@@ -220,43 +215,6 @@ else:
 
 st.markdown(
     f"""
-    <div style="...">
-        <h1>{emoji} AI DECISION</h1>
-        <h2>{latest['action']}</h2>
-        <h4>{latest['timeframe']}</h4>
-        <p><b>Risk Level:</b> {latest['risk']}</p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-current_month = int(latest["month"])
-
-crash_info = commodity_crash_rules.get(crop, None)
-
-crash_flag = False
-crash_message = ""
-
-if crash_info and current_month in crash_info["crash_months"]:
-    crash_flag = True
-    crash_message = (
-        f"⚠️ **{crop} Crash Window Detected**\n\n"
-        f"• Reason: {crash_info['reason']}\n"
-        f"• Expected Severity: {crash_info['severity']}"
-    )
-risk = latest["risk"]
-
-if "High" in risk:
-    bg_color = "#ffebee"
-    emoji = "🚨"
-elif "Medium" in risk:
-    bg_color = "#fff8e1"
-    emoji = "⚠️"
-else:
-    bg_color = "#e8f5e9"
-    emoji = "✅"
-
-st.markdown(
-    f"""
     <div style="
         background:{bg_color};
         padding:35px;
@@ -333,11 +291,6 @@ elif "Medium" in worst_month["risk"]:
     best_option = "Cold Storage"
 else:
     best_option = "Fresh Sale"
-
-if "High" in worst_month["risk"]:
-    best_option = "Solar Dryer"
-elif "Medium" in worst_month["risk"]:
-    best_option = "Cold Storage"
 
 st.success(f"✅ Best Option Right Now: **{best_option}**")
 
