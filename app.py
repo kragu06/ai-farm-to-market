@@ -2,7 +2,11 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# =========================
+# PAGE CONFIG & STYLE
+# =========================
 st.set_page_config(page_title="AI Farm-to-Market Cockpit", layout="wide")
+
 st.markdown(
     """
     <style>
@@ -17,47 +21,25 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-st.caption("Built to reduce distress sales by combining market memory, AI reasoning, and execution support.")
+
+st.caption(
+    "Built to reduce distress sales by combining market memory, AI reasoning, and execution support."
+)
 
 # =========================
 # LOAD DATA
 # =========================
 data = pd.read_csv("price_data.csv")
+
 required_cols = {"commodity", "year", "month", "price"}
 if not required_cols.issubset(data.columns):
     st.error("CSV file format incorrect. Required columns: commodity, year, month, price")
     st.stop()
-commodity_crash_rules = {
-    "Tomato": {
-        "crash_months": [4, 5],
-        "reason": "Seasonal oversupply and harvest glut",
-        "severity": "High"
-    },
-    "Onion": {
-        "crash_months": [4, 5, 6],
-        "reason": "Export restrictions and storage release",
-        "severity": "Very High"
-    },
-    "Potato": {
-        "crash_months": [3, 4],
-        "reason": "Post-harvest arrivals buffered by cold storage",
-        "severity": "Low"
-    },
-    "Brinjal": {
-        "crash_months": [6, 7],
-        "reason": "Local market saturation",
-        "severity": "Medium"
-    },
-    "Green Chilli": {
-        "crash_months": [],
-        "reason": "High demand volatility, rarely crashes",
-        "severity": "Low"
-    }
-}
 
 month_map = {
-    1:"Jan", 2:"Feb", 3:"Mar", 4:"Apr", 5:"May", 6:"Jun",
-    7:"Jul", 8:"Aug", 9:"Sep", 10:"Oct", 11:"Nov", 12:"Dec"
+    1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr",
+    5: "May", 6: "Jun", 7: "Jul", 8: "Aug",
+    9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"
 }
 data["month_name"] = data["month"].map(month_map)
 
@@ -75,10 +57,7 @@ st.subheader("👨‍🌾 Context")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    crop = st.selectbox(
-    "Commodity",
-    sorted(data["commodity"].unique())
-    )
+    crop = st.selectbox("Commodity", sorted(data["commodity"].unique()))
 
 with col2:
     quantity = st.number_input("Quantity (kg)", min_value=100, step=100)
@@ -88,6 +67,9 @@ with col3:
 
 st.divider()
 
+# =========================
+# LOCATION & MAP
+# =========================
 st.subheader("📍 Farmer Location")
 
 farmer_location = st.text_input(
@@ -99,12 +81,7 @@ st.subheader("🏗️ Required Infrastructure")
 
 infra_type = st.selectbox(
     "Select Infrastructure Type",
-    [
-        "Solar Dryer",
-        "Cold Storage",
-        "Market / Mandi",
-        "Government Warehouse"
-    ]
+    ["Solar Dryer", "Cold Storage", "Market / Mandi", "Government Warehouse"]
 )
 
 if farmer_location:
@@ -112,24 +89,24 @@ if farmer_location:
     maps_url = f"https://www.google.com/maps/search/{search_query}+near+{farmer_location}"
     st.markdown(f"[👉 Open {infra_type} in Google Maps]({maps_url})")
 
+# =========================
+# ALL-YEARS DATA (CORE DESIGN)
+# =========================
+commodity_data = data[data["commodity"] == crop]
+
+if commodity_data.empty:
+    st.warning("No historical data available for this commodity.")
+    st.stop()
 
 # =========================
-# YEAR SELECTION
+# CURRENT PRICE LEVEL (YEAR-AGNOSTIC)
 # =========================
-st.subheader("📅 Market Context")
-commodity_data = data[data["commodity"] == crop]
-# =========================
-# STEP 4: CURRENT PRICE LEVEL (YEAR-AGNOSTIC)
-# =========================
-recent_window = 6  # last 6 data points
+recent_window = min(6, len(commodity_data))
 current_price = commodity_data.tail(recent_window)["price"].mean()
 
 # =========================
-# PRICE TREND (ALL YEARS – SEASONAL PATTERN)
-# =============if farmer_location:
-    search_query = infra_type.replace(" ", "+")
-    maps_url = f"https://www.google.com/maps/search/{search_query}+near+{farmer_location}"
-    st.markdown(f"[👉 Open {infra_type} in Google Maps]({maps_url})")============
+# SEASONAL PATTERN CHART
+# =========================
 st.subheader("📈 Long-Term Seasonal Price Pattern")
 
 seasonal_plot = (
@@ -149,27 +126,18 @@ ax.set_title(f"{crop} – Historical Seasonal Pattern")
 st.pyplot(fig)
 
 # =========================
-# SEASONAL BASELINE
-# =========================
-seasonal_avg = (
-    data[data["commodity"] == crop]
-    .groupby("month")["price"]
-    .mean()
-    .reset_index()
-)
-# =========================
-# STEP 5: SEASONAL COMPARISON (ALL YEARS)
+# SEASONAL COMPARISON
 # =========================
 current_month = pd.Timestamp.now().month
 
-seasonal_price = seasonal_avg.loc[
-    seasonal_avg["month"] == current_month, "price"
+seasonal_price = seasonal_plot.loc[
+    seasonal_plot["month"] == current_month, "price"
 ].values[0]
 
 deviation_pct = ((current_price - seasonal_price) / seasonal_price) * 100
 
 # =========================
-# CRASH & RISK LOGIC
+# RISK LOGIC
 # =========================
 def risk_label(dev):
     if dev < -30:
@@ -182,7 +150,7 @@ def risk_label(dev):
 risk = risk_label(deviation_pct)
 
 # =========================
-# MARKET HEALTH SCORE (ALL-YEARS LOGIC)
+# MARKET HEALTH SCORE
 # =========================
 health_score = int(max(0, min(100, 60 + deviation_pct)))
 
@@ -205,11 +173,7 @@ def decision(risk, urgency):
         return "Hold", "Review after 2 weeks"
     return "Sell", "Sell within 7 days"
 
-# =========================
-# DECISION ENGINE (SINGLE, ALL-YEARS)
-# =========================
 action, timeframe = decision(risk, urgency)
-risk = risk
 
 if "High" in risk:
     bg_color = "#ffebee"
@@ -232,68 +196,32 @@ st.markdown(
         margin-bottom:30px;
     ">
         <h1>{emoji} AI DECISION</h1>
-        <h2 style="margin-bottom:5px;">{action}</h2>
-        <h4 style="margin-top:5px;">{timeframe}</h4>
+        <h2>{action}</h2>
+        <h4>{timeframe}</h4>
         <p><b>Risk Level:</b> {risk}</p>
     </div>
     """,
     unsafe_allow_html=True
 )
+
+# =========================
+# DOWNSIDE WARNING
+# =========================
 if deviation_pct < -30:
-    st.error("⚠️ Severe downside risk detected based on long-term historical behaviour.")
+    st.error("⚠️ Historically severe downside risk. Storage or processing advised.")
 elif deviation_pct < -15:
-    st.warning("⚠️ Moderate downside risk detected. Caution advised.")
+    st.warning("⚠️ Moderate downside risk. Short-term holding may help.")
 else:
     st.success("✅ Price levels are within normal historical range.")
 
 # =========================
-# INFRASTRUCTURE MATCHING (MOCK LOGIC)
+# INFRASTRUCTURE RECOMMENDATION
 # =========================
 st.subheader("🏗️ Infrastructure Recommendation")
 
-infra = pd.DataFrame({
-    "Option": ["Solar Dryer", "Cold Storage", "Fresh Sale"],
-    "Distance (km)": [12, 8, 3],
-    "Cost": ["₹2/kg", "₹1.5/kg/day", "₹0"],
-    "Time": ["3 days", "15 days", "Immediate"],
-    "Suitability": ["High", "Medium", "Loif deviation_pct < -30:
-    st.error("⚠️ Severe downside risk detected based on long-term historical behaviour.")
-elif deviation_pct < -15:
-    st.warning("⚠️ Moderate downside risk detected. Caution advised.")
-else:
-    st.success("✅ Price levels are within normal historical range.")w"]
-})
-
-st.table(infra)
-st.subheader("🚀 Take Action")
-
-if st.button("Proceed with AI Recommendation"):
-    st.success(
-        f"""
-        ✅ Action Confirmed!
 if "High" in risk:
     best_option = "Solar Dryer"
 elif "Medium" in risk:
-    best_option = "Cold Storage"
-else:
-    best_option = "Fresh Sale"
-        • Selected Option: **{best_option}**  
-        • Quantity: **{quantity} kg**  
-        • Next step: Initiating execution workflow.
-        """
-    )
-
-    st.info(
-        "📋 Next Steps:\n"
-        "• Contact nearby facility\n"
-        "• Reserve slot\n"
-        "• Arrange transport\n"
-        "• Monitor price recovery window"
-    )
-
-if "High" in worst_month["risk"]:
-    best_option = "Solar Dryer"
-elif "Medium" in worst_month["risk"]:
     best_option = "Cold Storage"
 else:
     best_option = "Fresh Sale"
@@ -301,47 +229,40 @@ else:
 st.success(f"✅ Best Option Right Now: **{best_option}**")
 
 # =========================
-# VALUE ADD MARGIN
+# VALUE IMPACT
 # =========================
 st.subheader("💰 Value Impact")
-fresh_value = year_data["price"].mean()
+
+fresh_value = commodity_data["price"].mean()
 processed_value = fresh_value * 1.18
 
 st.write(f"• Fresh sale estimate: ₹{int(fresh_value)}")
 st.write(f"• After processing: ₹{int(processed_value)} (**+18%**)")
 
 # =========================
-# DEMAND & SALES INTELLIGENCE
+# DEMAND SIGNAL
 # =========================
 st.subheader("🛒 Demand & Sales Intelligence")
 
 if health_score < 50:
     demand = "🟡 Medium"
-    buyer = "Processing Unit / Bulk Buyer"
+    buyer = "Processing / Bulk Buyer"
 else:
     demand = "🟢 High"
-    buyer = "Wholesale Mandi / Urban Buyer"
+    buyer = "Wholesale / Urban Buyer"
 
 st.write(f"**Demand Signal:** {demand}")
 st.write(f"**Suggested Buyer Type:** {buyer}")
 
 # =========================
-# AI EXPLANATION (BEDROCK STYLE)
+# DOWNLOAD
 # =========================
-st.subheader("🧠 Why AI Suggests This")
+st.subheader("⬇ Download Decision Data")
 
-st.info(
-    "The system compares current monthly prices with long-term seasonal averages. "
-    "Prices falling significantly below normal seasonal levels are flagged as crash risks. "
-    "During such windows, storage or processing reduces downside risk and improves net income. "
-    "When prices align with or exceed seasonal norms, immediate selling is recommended."
-)
-st.subheader("⬇ Download Decision Report")
-
-csv = merged.to_csv(index=False)
+csv = commodity_data.to_csv(index=False)
 
 st.download_button(
-    "Download Decision CSV",
+    "Download CSV",
     csv,
     "decision_report.csv",
     "text/csv"
@@ -351,6 +272,7 @@ st.download_button(
 # HANDHOLDING MODEL
 # =========================
 st.subheader("🤝 Platform Handholding Model")
+
 st.write(
     "• Farmers retain decision control\n"
     "• Platform executes storage, processing, and sales\n"
@@ -358,16 +280,16 @@ st.write(
 )
 
 # =========================
-# IMPACT SUMMARY
+# IMPACT & ROADMAP
 # =========================
 st.subheader("🎯 Expected Impact")
+
 st.write(
     "📈 Income improvement: **+12–25%**\n\n"
     "🌾 Distress sale reduction\n\n"
     "♻️ Lower post-harvest waste\n\n"
     "🌞 Better utilization of rural infrastructure"
 )
-st.subheader("🔮 Future Roadmap")
 
 future_mode = st.toggle("Show Future Capabilities")
 
@@ -375,8 +297,9 @@ if future_mode:
     st.info(
         "Future versions will integrate live mandi prices, "
         "weather alerts, government policy notifications, "
-        "and automated buyer matching using cloud AI services."
+        "and automated buyer matching."
     )
+
 st.caption(
     "Note: This prototype demonstrates decision intelligence using historical data. "
     "Live integrations are part of the deployment roadmap."
