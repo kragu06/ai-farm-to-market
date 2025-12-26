@@ -205,41 +205,41 @@ else:
     st.write("• APMC mandis\n• Local wholesalers\n• Retail vendors")
 
 # =========================
-# AVAIL LEADS
+# AVAIL LEADS (USER-TRIGGERED)
 # =========================
-import requests
-import json
+st.subheader("🚀 Avail AI-Identified Leads")
 
-payload = {
-    "crop": crop,
-    "quantity": quantity,
-    "location": farmer_location,
-    "infra": infra_choice,
-    "risk": risk,
-    "urgency": urgency
-}
+if st.button("Request Buyer Connection"):
+    payload = {
+        "crop": crop,
+        "quantity": quantity,
+        "location": farmer_location,
+        "infra": infra_choice,
+        "risk": risk,
+        "urgency": urgency
+    }
 
-try:
-    response = requests.post(
-        "YOUR_GOOGLE_SCRIPT_URL",
-        data=json.dumps(payload),
-        headers={"Content-Type": "application/json"},
-        timeout=10
-    )
-
-    if response.status_code == 200:
-        st.success(
-            "✅ Request submitted successfully!\n\n"
-            "• Platform team notified\n"
-            "• Buyer matching initiated\n"
-            "• You will be contacted shortly"
+    try:
+        response = requests.post(
+            "https://script.google.com/macros/s/AKfycbyZS2YVxs-FR9uX2h4awGgdQ55Ug5943nmDlCRjoCC0p25Q1TTEgZ2a5WVsFY5DDQlF/exec",
+            data=json.dumps(payload),
+            headers={"Content-Type": "application/json"},
+            timeout=10
         )
-    else:
-        st.error("⚠️ Request failed. Please try again.")
 
-except Exception as e:
-    st.error("⚠️ Unable to submit request. Check internet connection.")
+        if response.status_code == 200:
+            st.success(
+                "✅ Request submitted successfully!\n\n"
+                "• Platform team notified\n"
+                "• Buyer matching initiated\n"
+                "• You will be contacted shortly"
+            )
+        else:
+            st.error("⚠️ Request failed. Please try again.")
 
+    except Exception as e:
+        st.error("⚠️ Unable to submit request. Check internet connection.")
+        
 # =========================
 # ₹ COST–BENEFIT COMPARISON (CORE WORKABILITY)
 # =========================
