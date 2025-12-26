@@ -79,8 +79,26 @@ farmer_location = st.text_input(
 
 st.subheader("🏗️ Required Infrastructure")
 
+# =========================
+# GOOGLE MAPS – NEARBY INFRASTRUCTURE
+# =========================
+infra_map_keywords = {
+    "Solar Dryer": "food processing unit",
+    "Cold Storage": "cold storage warehouse",
+    "Fresh Market Sale": "APMC market",
+    "Staggered Sale": "vegetable wholesale market"
+}
+
 if farmer_location:
-    search_query = infra_type.replace(" ", "+")
+    map_keyword = infra_map_keywords.get(infra_choice, "vegetable market")
+    maps_url = (
+        f"https://www.google.com/maps/search/"
+        f"{map_keyword}+near+{farmer_location}"
+    )
+
+    st.markdown(
+        f"📍 [View Nearby {infra_choice} Locations on Google Maps]({maps_url})"
+    )
     maps_url = f"https://www.google.com/maps/search/{search_query}+near+{farmer_location}"
     st.markdown(f"[👉 Open {infra_type} in Google Maps]({maps_url})")
 
