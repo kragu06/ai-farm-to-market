@@ -158,19 +158,34 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # =========================
-# GOOGLE MAPS (AI-DECIDED)
+# GOOGLE MAPS – NEARBY INFRASTRUCTURE
 # =========================
+import urllib.parse
+
 infra_map_keywords = {
-    "Solar Dryer":"food processing unit",
-    "Cold Storage":"cold storage warehouse",
-    "Fresh Market Sale":"APMC market"
+    "Solar Dryer": "food processing unit",
+    "Cold Storage": "cold storage warehouse",
+    "Fresh Market Sale": "APMC market"
 }
 
 if farmer_location:
-    keyword = infra_map_keywords.get(infra_choice,"vegetable market")
-    maps_url = f"https://www.google.com/maps/search/{keyword}+near+{farmer_location}"
-    st.markdown(f"📍 [View Nearby {infra_choice} on Google Maps]({maps_url})")
+    encoded_location = urllib.parse.quote(farmer_location)
 
+    map_keyword = infra_map_keywords.get(infra_choice, "vegetable market")
+    encoded_keyword = urllib.parse.quote(map_keyword)
+
+    maps_url = (
+        f"https://www.google.com/maps/search/"
+        f"{encoded_keyword}+near+{encoded_location}"
+    )
+
+    if st.button("📍 Show Nearby Facilities on Map"):
+        st.markdown(
+            f"[👉 Click here to view nearby {infra_choice} on Google Maps]({maps_url})",
+            unsafe_allow_html=True
+        )
+else:
+    st.info("Enter farmer location to view nearby facilities.")
 # =========================
 # DEMAND & SALES
 # =========================
