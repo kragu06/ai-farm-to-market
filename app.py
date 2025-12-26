@@ -79,11 +79,6 @@ farmer_location = st.text_input(
 
 st.subheader("🏗️ Required Infrastructure")
 
-infra_type = st.selectbox(
-    "Select Infrastructure Type",
-    ["Solar Dryer", "Cold Storage", "Market / Mandi", "Government Warehouse"]
-)
-
 if farmer_location:
     search_query = infra_type.replace(" ", "+")
     maps_url = f"https://www.google.com/maps/search/{search_query}+near+{farmer_location}"
@@ -148,6 +143,44 @@ def risk_label(dev):
         return "🟢 Normal"
 
 risk = risk_label(deviation_pct)
+# =========================
+# AI INFRASTRUCTURE DECISION ENGINE
+# =========================
+
+current_month = pd.Timestamp.now().month
+
+# Simple perishability score (domain knowledge)
+perishability = {
+    "Tomato": "High",
+    "Onion": "Medium",
+    "Potato": "Low",
+    "Brinjal": "High",
+    "Green Chilli": "Medium"
+}
+
+# Monsoon & summer proxy (India-focused)
+monsoon_months = [6, 7, 8, 9]
+summer_months = [3, 4, 5]
+
+if "High" in risk:
+    if perishability.get(crop) == "High":
+        infra_choice = "Solar Dryer"
+        infra_reason = "High price crash risk + high perishability"
+    else:
+        infra_choice = "Cold Storage"
+        infra_reason = "High price crash risk + lower perishability"
+
+elif "Medium" in risk:
+    if current_month in monsoon_months:
+        infra_choice = "Cold Storage"
+        infra_reason = "Monsoon season + moderate price risk"
+    else:
+        infra_choice = "Staggered Sale"
+        infra_reason = "Moderate risk, monitor recovery"
+
+else:
+    infra_choice = "Fresh Market Sale"
+    infra_reason = "Favourable prices, immediate sale advised"
 
 # =========================
 # MARKET HEALTH SCORE
@@ -239,7 +272,10 @@ else:
 # =========================
 # INFRASTRUCTURE RECOMMENDATION
 # =========================
-st.subheader("🏗️ Infrastructure Recommendation")
+st.subheader("🏗️ AI-Decided Infrastructure Strategy")
+
+st.success(f"✅ **Recommended Option:** {infra_choice}")
+st.info(f"🧠 **Why:** {infra_reason}")
 
 if "High" in risk:
     best_option = "Solar Dryer"
@@ -273,6 +309,28 @@ else:
 
 st.success(f"✅ Suggested Infrastructure: **{infra_choice}**")
 st.info(f"🧠 Why: {infra_reason}")
+
+# =========================
+# GOOGLE MAPS – NEARBY INFRASTRUCTURE
+# =========================
+
+infra_map_keywords = {
+    "Solar Dryer": "food processing unit",
+    "Cold Storage": "cold storage warehouse",
+    "Fresh Market Sale": "APMC market",
+    "Staggered Sale": "vegetable wholesale market"
+}
+
+if farmer_location:
+    map_keyword = infra_map_keywords.get(infra_choice, "vegetable market")
+    maps_url = (
+        f"https://www.google.com/maps/search/"
+        f"{map_keyword}+near+{farmer_location}"
+    )
+
+    st.markdown(
+        f"📍 [View Nearby {infra_choice} Locations on Google Maps]({maps_url})"
+    )
 
 # =========================
 # VALUE IMPACT
