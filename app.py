@@ -226,13 +226,59 @@ st.info(
 )
 
 # =========================
-# VALUE IMPACT
+# ₹ COST–BENEFIT COMPARISON (CORE WORKABILITY)
 # =========================
-st.subheader("💰 Value Impact")
+st.subheader("💰 AI Cost–Benefit Comparison")
 
-fresh_value = commodity_data["price"].mean()
-st.write(f"Fresh sale avg: ₹{int(fresh_value)}")
-st.write(f"Post-processing potential: ₹{int(fresh_value*1.18)} (+18%)")
+# --- Assumptions (can be replaced by real data later)
+cold_storage_cost_per_day = 1.5      # ₹ per kg per day
+drying_cost_per_kg = 2.0             # ₹ per kg
+expected_price_recovery_pct = 18     # % recovery after storage
+drying_value_multiplier = 1.25       # dried product value increase
+storage_days = 14                    # average holding period
+
+# --- Base price
+sell_now_price = current_price
+
+# --- Cold storage scenario
+cold_storage_cost = cold_storage_cost_per_day * storage_days
+stored_price = sell_now_price * (1 + expected_price_recovery_pct / 100)
+net_storage_price = stored_price - cold_storage_cost
+
+# --- Drying scenario
+dried_price = sell_now_price * drying_value_multiplier
+net_dried_price = dried_price - drying_cost_per_kg
+
+# --- Display table
+comparison_df = pd.DataFrame({
+    "Option": ["Sell Now", "Cold Storage", "Solar Drying"],
+    "Expected Price (₹/kg)": [
+        round(sell_now_price, 1),
+        round(stored_price, 1),
+        round(dried_price, 1)
+    ],
+    "Cost (₹/kg)": [
+        0,
+        round(cold_storage_cost, 1),
+        round(drying_cost_per_kg, 1)
+    ],
+    "Net Value (₹/kg)": [
+        round(sell_now_price, 1),
+        round(net_storage_price, 1),
+        round(net_dried_price, 1)
+    ]
+})
+
+st.table(comparison_df)
+
+# --- Highlight best option
+best_row = comparison_df.loc[comparison_df["Net Value (₹/kg)"].idxmax()]
+best_option = best_row["Option"]
+
+st.success(
+    f"🏆 **Best Financial Option:** {best_option}\n\n"
+    f"Expected net value: ₹{best_row['Net Value (₹/kg)']} per kg"
+)
 
 # =========================
 # DOWNLOAD
