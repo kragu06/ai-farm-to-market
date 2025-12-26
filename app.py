@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import requests
+import json
 # =========================
 # PAGE CONFIG
 # =========================
@@ -206,24 +207,38 @@ else:
 # =========================
 # AVAIL LEADS
 # =========================
-st.subheader("🚀 Avail AI-Identified Leads")
+import requests
+import json
 
-if st.button("Request Buyer Connection"):
-    st.success(
-        "✅ Request submitted\n\n"
-        "• Platform contacts buyers\n"
-        "• Negotiates pricing\n"
-        "• Coordinates logistics\n"
-        "• Farmer approves deal\n\n"
-        "⏳ Response in 24–48 hrs"
+payload = {
+    "crop": crop,
+    "quantity": quantity,
+    "location": farmer_location,
+    "infra": infra_choice,
+    "risk": risk,
+    "urgency": urgency
+}
+
+try:
+    response = requests.post(
+        "YOUR_GOOGLE_SCRIPT_URL",
+        data=json.dumps(payload),
+        headers={"Content-Type": "application/json"},
+        timeout=10
     )
 
-st.info(
-    "🤝 **Handholding Model**\n\n"
-    "• Farmer never chases buyers\n"
-    "• Platform earns only if farmer earns\n"
-    "• No upfront cost"
-)
+    if response.status_code == 200:
+        st.success(
+            "✅ Request submitted successfully!\n\n"
+            "• Platform team notified\n"
+            "• Buyer matching initiated\n"
+            "• You will be contacted shortly"
+        )
+    else:
+        st.error("⚠️ Request failed. Please try again.")
+
+except Exception as e:
+    st.error("⚠️ Unable to submit request. Check internet connection.")
 
 # =========================
 # ₹ COST–BENEFIT COMPARISON (CORE WORKABILITY)
