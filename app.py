@@ -3,8 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import requests
 import json
+import urllib.parse
+
 # =========================
-# PAGE CONFIG
+# PAGE CONFIG & STYLE
 # =========================
 st.set_page_config(page_title="AI Farm-to-Market Cockpit", layout="wide")
 
@@ -13,14 +15,16 @@ st.markdown("""
 .card {
     background-color: white;
     padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
     margin-bottom: 20px;
 }
 </style>
 """, unsafe_allow_html=True)
 
-st.caption("Built to reduce distress sales using long-term market intelligence and AI execution support.")
+st.caption(
+    "Reducing distress sales through long-term market intelligence and AI-driven execution support."
+)
 
 # =========================
 # LOAD DATA
@@ -29,7 +33,7 @@ data = pd.read_csv("price_data.csv")
 
 required_cols = {"commodity", "year", "month", "price"}
 if not required_cols.issubset(data.columns):
-    st.error("CSV must contain: commodity, year, month, price")
+    st.error("CSV must contain columns: commodity, year, month, price")
     st.stop()
 
 month_map = {
@@ -41,11 +45,11 @@ data["month_name"] = data["month"].map(month_map)
 # =========================
 # HEADER
 # =========================
-st.title("🍅 AI Farm-to-Market Decision Cockpit")
+st.title("🌾 AI Farm-to-Market Decision Cockpit")
 st.caption("Decision → Infrastructure → Sales → Execution")
 
 # =========================
-# CONTEXT
+# FARMER CONTEXT
 # =========================
 st.subheader("👨‍🌾 Farmer Context")
 
@@ -69,12 +73,12 @@ farmer_location = st.text_input(
 )
 
 # =========================
-# DATA FILTER
+# FILTER DATA
 # =========================
 commodity_data = data[data["commodity"] == crop]
 
 if commodity_data.empty:
-    st.warning("No data available for selected commodity.")
+    st.warning("No historical data available for selected commodity.")
     st.stop()
 
 # =========================
@@ -121,27 +125,33 @@ risk = risk_label(deviation_pct)
 # MARKET HEALTH
 # =========================
 health_score = int(max(0, min(100, 60 + deviation_pct)))
-health_text = "🔴 Dangerous" if health_score < 35 else "🟠 Uncertain" if health_score < 60 else "🟢 Favorable"
+health_text = (
+    "🔴 Dangerous" if health_score < 35
+    else "🟠 Uncertain" if health_score < 60
+    else "🟢 Favorable"
+)
 st.metric("🧠 Market Health Score", f"{health_score}/100", health_text)
 
 # =========================
 # AI INFRASTRUCTURE DECISION
 # =========================
 perishability = {
-    "Tomato":"High","Brinjal":"High",
-    "Onion":"Medium","Green Chilli":"Medium",
+    "Tomato":"High",
+    "Brinjal":"High",
+    "Onion":"Medium",
+    "Green Chilli":"Medium",
     "Potato":"Low"
 }
 
 if "High" in risk:
-    infra_choice = "Solar Dryer" if perishability[crop]=="High" else "Cold Storage"
-    infra_reason = "High price crash risk detected"
+    infra_choice = "Solar Dryer" if perishability[crop] == "High" else "Cold Storage"
+    infra_reason = "Severe price crash risk detected"
 elif "Medium" in risk:
     infra_choice = "Cold Storage"
-    infra_reason = "Moderate risk – wait for recovery"
+    infra_reason = "Moderate risk – wait for price recovery"
 else:
     infra_choice = "Fresh Market Sale"
-    infra_reason = "Prices favorable"
+    infra_reason = "Prices are historically favorable"
 
 # =========================
 # AI DECISION BANNER
@@ -150,19 +160,17 @@ emoji = "🚨" if "High" in risk else "⚠️" if "Medium" in risk else "✅"
 bg = "#ffebee" if "High" in risk else "#fff8e1" if "Medium" in risk else "#e8f5e9"
 
 st.markdown(f"""
-<div style="background:{bg};padding:30px;border-radius:16px;text-align:center;">
+<div style="background:{bg};padding:30px;border-radius:18px;text-align:center;">
 <h1>{emoji} AI DECISION</h1>
 <h2>{infra_choice}</h2>
 <p><b>Reason:</b> {infra_reason}</p>
-<p><b>Risk:</b> {risk}</p>
+<p><b>Risk Level:</b> {risk}</p>
 </div>
 """, unsafe_allow_html=True)
 
 # =========================
-# GOOGLE MAPS – NEARBY INFRASTRUCTURE
+# GOOGLE MAPS (AI-DECIDED)
 # =========================
-import urllib.parse
-
 infra_map_keywords = {
     "Solar Dryer": "food processing unit",
     "Cold Storage": "cold storage warehouse",
@@ -170,29 +178,27 @@ infra_map_keywords = {
 }
 
 if farmer_location:
-    encoded_location = urllib.parse.quote(farmer_location)
-
-    map_keyword = infra_map_keywords.get(infra_choice, "vegetable market")
-    encoded_keyword = urllib.parse.quote(map_keyword)
-
+    keyword = infra_map_keywords.get(infra_choice, "vegetable market")
     maps_url = (
-        f"https://www.google.com/maps/search/"
-        f"{encoded_keyword}+near+{encoded_location}"
+        "https://www.google.com/maps/search/"
+        + urllib.parse.quote(keyword + " near " + farmer_location)
     )
 
-    if st.button("📍 Show Nearby Facilities on Map"):
-        st.markdown(
-            f"[👉 Click here to view nearby {infra_choice} on Google Maps]({maps_url})",
-            unsafe_allow_html=True
-        )
-else:
-    st.info("Enter farmer location to view nearby facilities.")
+    st.link_button(
+        f"📍 View Nearby {infra_choice} on Google Maps",
+        maps_url
+    )
+
 # =========================
-# DEMAND & SALES
+# DEMAND & SALES INTELLIGENCE
 # =========================
 st.subheader("🛒 Demand & Sales Intelligence")
 
-demand = "Low" if "High" in risk else "Selective" if "Medium" in risk else "Strong"
+demand = (
+    "Low" if "High" in risk
+    else "Selective" if "Medium" in risk
+    else "Strong"
+)
 st.metric("📊 Demand Signal", demand)
 
 st.subheader("📦 AI Sales Path")
@@ -205,7 +211,7 @@ else:
     st.write("• APMC mandis\n• Local wholesalers\n• Retail vendors")
 
 # =========================
-# AVAIL LEADS (USER-TRIGGERED)
+# AVAIL LEADS (REAL REQUEST)
 # =========================
 st.subheader("🚀 Avail AI-Identified Leads")
 
@@ -214,7 +220,7 @@ if st.button("Request Buyer Connection"):
         "crop": crop,
         "quantity": quantity,
         "location": farmer_location,
-        "infra": infra_choice,
+        "infra_choice": infra_choice,
         "risk": risk,
         "urgency": urgency
     }
@@ -229,7 +235,7 @@ if st.button("Request Buyer Connection"):
 
         if response.status_code == 200:
             st.success(
-                "✅ Request submitted successfully!\n\n"
+                "✅ Request submitted successfully\n\n"
                 "• Platform team notified\n"
                 "• Buyer matching initiated\n"
                 "• You will be contacted shortly"
@@ -237,68 +243,54 @@ if st.button("Request Buyer Connection"):
         else:
             st.error("⚠️ Request failed. Please try again.")
 
-    except Exception as e:
+    except Exception:
         st.error("⚠️ Unable to submit request. Check internet connection.")
-        
+
+st.info(
+    "🤝 **Handholding Model**\n\n"
+    "• Farmers never chase buyers\n"
+    "• Platform negotiates & executes\n"
+    "• Revenue only on successful outcome"
+)
+
 # =========================
-# ₹ COST–BENEFIT COMPARISON (CORE WORKABILITY)
+# ₹ COST–BENEFIT COMPARISON
 # =========================
 st.subheader("💰 AI Cost–Benefit Comparison")
 
-# --- Assumptions (can be replaced by real data later)
-cold_storage_cost_per_day = 1.5      # ₹ per kg per day
-drying_cost_per_kg = 2.0             # ₹ per kg
-expected_price_recovery_pct = 18     # % recovery after storage
-drying_value_multiplier = 1.25       # dried product value increase
-storage_days = 14                    # average holding period
+cold_storage_cost_per_day = 1.5
+drying_cost_per_kg = 2.0
+expected_price_recovery_pct = 18
+drying_value_multiplier = 1.25
+storage_days = 14
 
-# --- Base price
 sell_now_price = current_price
-
-# --- Cold storage scenario
-cold_storage_cost = cold_storage_cost_per_day * storage_days
 stored_price = sell_now_price * (1 + expected_price_recovery_pct / 100)
-net_storage_price = stored_price - cold_storage_cost
+net_storage_price = stored_price - (cold_storage_cost_per_day * storage_days)
+net_dried_price = (sell_now_price * drying_value_multiplier) - drying_cost_per_kg
 
-# --- Drying scenario
-dried_price = sell_now_price * drying_value_multiplier
-net_dried_price = dried_price - drying_cost_per_kg
-
-# --- Display table
 comparison_df = pd.DataFrame({
     "Option": ["Sell Now", "Cold Storage", "Solar Drying"],
-    "Expected Price (₹/kg)": [
-        round(sell_now_price, 1),
-        round(stored_price, 1),
-        round(dried_price, 1)
-    ],
-    "Cost (₹/kg)": [
-        0,
-        round(cold_storage_cost, 1),
-        round(drying_cost_per_kg, 1)
-    ],
     "Net Value (₹/kg)": [
-        round(sell_now_price, 1),
-        round(net_storage_price, 1),
-        round(net_dried_price, 1)
+        round(sell_now_price,1),
+        round(net_storage_price,1),
+        round(net_dried_price,1)
     ]
 })
 
 st.table(comparison_df)
 
-# --- Highlight best option
-best_row = comparison_df.loc[comparison_df["Net Value (₹/kg)"].idxmax()]
-best_option = best_row["Option"]
+best_option = comparison_df.loc[
+    comparison_df["Net Value (₹/kg)"].idxmax(), "Option"
+]
 
-st.success(
-    f"🏆 **Best Financial Option:** {best_option}\n\n"
-    f"Expected net value: ₹{best_row['Net Value (₹/kg)']} per kg"
-)
+st.success(f"🏆 Best Financial Option: **{best_option}**")
 
 # =========================
 # DOWNLOAD
 # =========================
 st.subheader("⬇ Download Data")
+
 st.download_button(
     "Download Commodity Data",
     commodity_data.to_csv(index=False),
@@ -309,4 +301,7 @@ st.download_button(
 # =========================
 # FOOTER
 # =========================
-st.caption("Prototype uses historical intelligence. Live price, weather & buyer APIs are roadmap items.")
+st.caption(
+    "This prototype uses historical intelligence. "
+    "Live price, weather, and buyer APIs are part of the roadmap."
+)
