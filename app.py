@@ -228,7 +228,7 @@ if st.button("Request Buyer Connection"):
     try:
         response = requests.post(
             
-            "https://script.google.com/macros/s/AKfycbwiSen3-D_x-ooF00U9eaQP-VksX6M9IM--sTws4KDHJJJl14RacBeaYx3d8qDISQ6x/exec",
+            "https://script.google.com/macros/s/AKfycbynbBKLTsoZ36y5qaNiHXnbD1c_HpmNFpLSrux_ou_n-j4XwWiRnnU_eQYPV2I6m3Tu/exec",
             headers={"Content-Type": "application/json"},
             data=json.dumps(payload),
             timeout=10
