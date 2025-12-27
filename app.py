@@ -227,18 +227,11 @@ if st.button("Request Buyer Connection"):
 
     try:
         response = requests.post(
-            
             "https://script.google.com/macros/s/AKfycbynbBKLTsoZ36y5qaNiHXnbD1c_HpmNFpLSrux_ou_n-j4XwWiRnnU_eQYPV2I6m3Tu/exec",
             headers={"Content-Type": "application/json"},
             data=json.dumps(payload),
             timeout=10
         )
-
-        st.success("✅ Request submitted successfully")
-
-    except Exception as e:
-        st.error(f"❌ Error sending request: {e}")
-
 
         if response.status_code == 200:
             st.success(
@@ -247,6 +240,11 @@ if st.button("Request Buyer Connection"):
                 "• Buyer matching initiated\n"
                 "• You will be contacted shortly"
             )
+        else:
+            st.error("⚠️ Request failed. Please try again.")
+
+    except Exception as e:
+        st.error(f"❌ Error sending request: {e}")
         else:
             st.error("⚠️ Request failed. Please try again.")
 
@@ -264,27 +262,67 @@ st.info(
 # ₹ COST–BENEFIT COMPARISON
 # =========================
 st.subheader("💰 AI Cost–Benefit Comparison")
+# =========================
+# CORRECT SOLAR DRYING ECONOMICS
+# =========================
 
+# Drying yield ratios (fresh → dried)
+dry_yield_ratio = {
+    "Tomato": 0.10,
+    "Onion": 0.12,
+    "Brinjal": 0.08,
+    "Green Chilli": 0.15,
+    "Potato": 0.20
+}
+
+# Wholesale dried product prices (₹/kg)
+dried_market_price = {
+    "Tomato": 220,
+    "Onion": 180,
+    "Brinjal": 200,
+    "Green Chilli": 320,
+    "Potato": 150
+}
+
+drying_cost_per_kg_fresh = 2.0  # ₹ per kg fresh input
+
+fresh_qty = quantity
+dry_qty = fresh_qty * dry_yield_ratio[crop]
+
+dry_revenue = dry_qty * dried_market_price[crop]
+drying_cost = fresh_qty * drying_cost_per_kg_fresh
+
+net_dry_value = dry_revenue - drying_cost
+net_dry_value_per_kg_fresh = net_dry_value / fresh_qty
 cold_storage_cost_per_day = 1.5
-drying_cost_per_kg = 2.0
 expected_price_recovery_pct = 18
-drying_value_multiplier = 1.25
 storage_days = 14
 
 sell_now_price = current_price
 stored_price = sell_now_price * (1 + expected_price_recovery_pct / 100)
 net_storage_price = stored_price - (cold_storage_cost_per_day * storage_days)
-net_dried_price = (sell_now_price * drying_value_multiplier) - drying_cost_per_kg
 
 comparison_df = pd.DataFrame({
     "Option": ["Sell Now", "Cold Storage", "Solar Drying"],
-    "Net Value (₹/kg)": [
-        round(sell_now_price,1),
-        round(net_storage_price,1),
-        round(net_dried_price,1)
+    "Net Value (₹/kg fresh)": [
+        round(sell_now_price, 1),
+        round(net_storage_price, 1),
+        round(net_dry_value_per_kg_fresh, 1)
     ]
 })
 
+st.table(comparison_df)
+
+best_option = comparison_df.loc[
+    comparison_df["Net Value (₹/kg fresh)"].idxmax(), "Option"
+]
+
+st.success(f"🏆 Best Financial Option: **{best_option}**")
+
+st.info(
+    f"Solar drying converts {fresh_qty} kg fresh → "
+    f"{round(dry_qty,1)} kg dried, sold at ₹{dried_market_price[crop]}/kg"
+)
 st.table(comparison_df)
 
 best_option = comparison_df.loc[
