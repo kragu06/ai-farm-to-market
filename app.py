@@ -182,33 +182,38 @@ comparison_df = pd.DataFrame({
 st.table(comparison_df)
 
 # =========================
-# REQUEST BUYER CONNECTION
+# AVAIL AI LEADS (REAL BACKEND) – FIXED
 # =========================
-st.subheader("🚀 Request Buyer Connection")
+st.subheader("🚀 Avail AI-Identified Leads")
 
-if st.button("Submit Request"):
+if st.button("Request Buyer Connection"):
     payload = {
         "crop": crop,
         "quantity": quantity,
         "location": farmer_location,
-        "infra": infra_choice,
+        "infra_choice": infra_choice,
         "risk": risk,
         "urgency": urgency
     }
 
     try:
-        r = requests.post(
+        response = requests.post(
             "https://script.google.com/macros/s/AKfycbynbBKLTsoZ36y5qaNiHXnbD1c_HpmNFpLSrux_ou_n-j4XwWiRnnU_eQYPV2I6m3Tu/exec",
-            json=payload,
+            headers={"Content-Type": "application/json"},
+            data=json.dumps(payload),
             timeout=10
         )
 
-        if r.status_code == 200:
-            st.success("✅ Request submitted. Platform team notified.")
+        if response.status_code == 200:
+            st.success(
+                "✅ Request submitted successfully\n\n"
+                "• Platform team notified\n"
+                "• Buyer matching initiated\n"
+                "• You will be contacted shortly"
+            )
         else:
-            st.error("⚠️ Submission failed.")
+            st.error("⚠️ Server responded, but request failed.")
 
     except Exception as e:
-        st.error(f"❌ Error: {e}")
-
+        st.error(f"❌ Unable to submit request: {e}")
 st.caption("Prototype uses historical intelligence. Live integrations are roadmap items.")
