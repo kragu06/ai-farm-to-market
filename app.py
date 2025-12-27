@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import requests, json, urllib.parse
+from aws.bedrock_client import explain_decision
 
 # =========================
 # PAGE CONFIG & STYLE
