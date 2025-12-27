@@ -314,12 +314,6 @@ best_option = comparison_df.loc[
     comparison_df["Net Value (₹ per 100 kg fresh)"].idxmax(), "Option"
 ]
 
-st.success(f"🏆 Best Option for 100 kg fresh input: **{best_option}**")
-
-st.info(
-    f"Solar drying converts 100 kg fresh → {round(dry_qty,1)} kg dried "
-    f"sold at ₹{dried_market_price[crop]}/kg"
-)
 # =========================
 # DOWNLOAD
 # =========================
