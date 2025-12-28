@@ -1,10 +1,11 @@
-import boto3
-
-s3 = boto3.client("s3")
+# aws/s3_utils.py
+# SAFE FALLBACK – NO AWS SDK REQUIRED
 
 def upload_report(bucket, key, content):
-    s3.put_object(
-        Bucket=bucket,
-        Key=key,
-        Body=content
-    )
+    """
+    Placeholder for Amazon S3 upload.
+
+    In production deployment, this function will upload
+    reports to Amazon S3 using boto3 and IAM roles.
+    """
+    print("S3 upload simulated:", bucket, key)
